@@ -1,0 +1,608 @@
+/* ==========================================================================
+   1. VARIABLES DE POSITIONNEMENT & BANDEAU PRINCIPAL
+   ========================================================================== */
+.profil-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  color: var(--color-text);
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (min-width: 768px) {
+  .profil-layout {
+    padding: 40px 24px;
+  }
+}
+
+/* ── ONGLETS DE SÉLECTION DE RÔLE (NAVIGATION STYLE SAAS) ── */
+.profil-role-tabs {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  padding: 6px;
+  border-radius: 16px;
+  margin-bottom: 32px;
+  gap: 6px;
+}
+
+@media (min-width: 640px) {
+  .profil-role-tabs {
+    flex-direction: row;
+    border-radius: 30px; /* Style bulle ovale sur desktop */
+  }
+}
+
+.role-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .role-tab {
+    border-radius: 24px;
+  }
+}
+
+.role-tab:hover {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.role-tab.active {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow, 0 4px 12px rgba(0, 0, 0, 0.05));
+}
+
+.role-tab.recruiter-gate {
+  border: 1px dashed transparent;
+}
+.role-tab.recruiter-gate:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ==========================================================================
+   2. BLOC KPI / GRILLE DE STATISTIQUES (BULLES VISUELLES)
+   ========================================================================== */
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 640px) {
+  .profile-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+.stat-pill-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 20px; /* Forme de grosse bulle moderne */
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease;
+}
+
+.stat-pill-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-pill-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.stat-pill-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.stat-pill-icon.purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+.stat-pill-icon.green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+.stat-pill-data h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.stat-pill-data p {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   3. DISPOSITION EN DOUBLE COLONNE PRINCIPALE
+   ========================================================================== */
+.profil__main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 992px) {
+  .profil__main {
+    grid-template-columns: 420px 1fr; /* Proportion parfaite asymétrique */
+    gap: 32px;
+  }
+}
+
+.profil-left-col,
+.profil-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 992px) {
+  .profil-left-col,
+  .profil-right-col {
+    gap: 32px;
+  }
+}
+
+/* Style partagé pour toutes les cartes de section */
+.profil__main section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px; /* Coins arrondis "bulles premium" */
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 768px) {
+  .profil__main section {
+    padding: 32px;
+  }
+}
+
+.profil__main h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   4. CARTE IDENTITÉ ET ÉDITION DYNAMIQUE
+   ========================================================================== */
+.profile-card-edit-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.btn-edit-action-minimal {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-edit-action-minimal:hover {
+  background: var(--color-border);
+}
+
+.profile-identity-display {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.profile-avatar-circle {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-primary), #60a5fa);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.profile-identity-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.profile-identity-fields h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.profile-school-tag {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* Inputs en mode édition */
+.edit-profile-input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.edit-profile-input.text-bold {
+  font-weight: 700;
+}
+.edit-profile-input:focus, .edit-profile-textarea:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.profile-bio-container {
+  margin-bottom: 24px;
+}
+
+.profile-bio-container h4 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-bio-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.edit-profile-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.profile-contact-line {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.btn-upload-cv {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-upload-cv:hover {
+  background: var(--color-border);
+  border-color: var(--color-text-secondary);
+}
+
+/* ==========================================================================
+   5. COMPOSANT CLOUD SKILLS INTERACTIF (BULLES TECHNOLOGIQUES)
+   ========================================================================== */
+.section-subdescription {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+.profile-skills-tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.interactive-skill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 6px 14px;
+  border-radius: 30px; /* Vrai format bulle ovale */
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.interactive-skill-badge:hover {
+  border-color: var(--color-primary);
+  background: rgba(59, 130, 246, 0.04);
+}
+
+.interactive-skill-badge button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.interactive-skill-badge button:hover {
+  color: #ef4444;
+}
+
+.add-skill-inline-form {
+  display: flex;
+  gap: 8px;
+}
+
+.add-skill-inline-form input {
+  flex: 1;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.add-skill-inline-form button {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.add-skill-inline-form button:hover {
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   6. ZONE DE SUIVI DE FLUX & CANDIDATURES
+   ========================================================================== */
+.section-title-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.btn-text-link-navigation {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-text-link-navigation:hover {
+  text-decoration: underline;
+}
+
+.candidatures-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.candidature-item-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 480px) {
+  .candidature-item-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.candidature-item-row:hover {
+  transform: translateX(4px);
+  border-color: var(--color-primary);
+}
+
+.candidature-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.candidature-item-main strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.candidature-item-main span {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+/* Pilules de statut premium */
+.status-pill-premium {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px; /* Format bulle fermée */
+  white-space: nowrap;
+}
+
+@media (min-width: 480px) {
+  .status-pill-premium {
+    align-self: auto;
+  }
+}
+
+/* ==========================================================================
+   7. INTERFACE AGENDA / CALENDRIER MINI
+   ========================================================================== */
+.pcal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pcal__nav {
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.pcal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.pcal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.pcal__day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  color: var(--color-text);
+  transition: background-color 0.15s;
+}
+
+.pcal__day:not(:empty) {
+  cursor: pointer;
+}
+
+.pcal__day:not(:empty):hover {
+  background: var(--color-surface-2);
+}
+
+.pcal__day.today {
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+/* ==========================================================================
+   8. BOUTON DE DECONNEXION SYSTEME
+   ========================================================================== */
+.btn-global-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 14px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.btn-global-logout:hover {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}

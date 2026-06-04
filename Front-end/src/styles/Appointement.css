@@ -1,0 +1,423 @@
+/* ============================================ */
+/*  APPOINTEMENT PAGE — STYLES COMPLETS        */
+/* ============================================ */
+
+/* CONTENEUR PRINCIPAL */
+.appointment-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* BOUTON RETOUR */
+.btn-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--color-text, #e2e8f0);
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 32px;
+  transition: background 0.2s, border-color 0.2s;
+}
+.btn-back-link:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* EN-TÊTE */
+.appointment-header {
+  margin-bottom: 36px;
+}
+.appointment-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text, #f1f5f9);
+  margin-bottom: 6px;
+}
+.appointment-header p {
+  font-size: 14px;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+/* BANNIÈRE ERREUR */
+.error-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+/* ============================================ */
+/*  LAYOUT DEUX COLONNES                        */
+/* ============================================ */
+.appointment-grid-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ============================================ */
+/*  COLONNE GAUCHE — SIDEBAR INFO               */
+/* ============================================ */
+.appointment-info-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* CARTE CANDIDAT */
+.candidate-context-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 20px;
+}
+.context-badge {
+  display: inline-block;
+  background: rgba(99,102,241,0.2);
+  color: #a5b4fc;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+.candidate-context-card h3 {
+  font-size: 13px;
+  color: var(--color-text-muted, #94a3b8);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.context-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.context-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.context-profile-row h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text, #f1f5f9);
+  margin-bottom: 3px;
+}
+.context-profile-row p {
+  font-size: 12px;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+/* CARTE FORMAT RDV */
+.meeting-type-selector-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 20px;
+}
+.meeting-type-selector-card h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text, #f1f5f9);
+  margin-bottom: 14px;
+}
+.type-options-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.type-option-bubble {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.type-option-bubble input[type="radio"] {
+  display: none;
+}
+.type-option-bubble.selected {
+  border-color: #6366f1;
+  background: rgba(99,102,241,0.1);
+}
+.type-option-bubble .icon {
+  font-size: 18px;
+  color: #a5b4fc;
+  flex-shrink: 0;
+}
+.type-option-bubble strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text, #f1f5f9);
+  margin-bottom: 2px;
+}
+.type-option-bubble span {
+  font-size: 11px;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+/* ============================================ */
+/*  COLONNE DROITE — PICKER DATE / HEURE       */
+/* ============================================ */
+.appointment-picker-workspace {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 28px;
+}
+
+/* SECTION DATE */
+.date-picker-section {
+  margin-bottom: 28px;
+}
+.date-picker-section h4,
+.time-picker-section h4,
+.message-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text, #f1f5f9);
+  margin-bottom: 14px;
+}
+.premium-date-input {
+  padding: 11px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: var(--color-text, #f1f5f9);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  color-scheme: dark;
+}
+.premium-date-input:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+/* SECTION HEURES */
+.time-picker-section {
+  margin-bottom: 28px;
+}
+.time-slots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.time-slot-bubble {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: var(--color-text, #f1f5f9);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.time-slot-bubble:hover:not(.locked) {
+  border-color: #6366f1;
+  background: rgba(99,102,241,0.15);
+}
+.time-slot-bubble.selected {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+  color: white;
+  font-weight: 600;
+}
+.time-slot-bubble.locked {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* SECTION MESSAGE */
+.message-section {
+  margin-bottom: 28px;
+}
+.premium-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: var(--color-text, #f1f5f9);
+  font-size: 14px;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.premium-textarea::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+.premium-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+/* BOUTON CONFIRMER */
+.btn-submit-appointment {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  letter-spacing: 0.3px;
+}
+.btn-submit-appointment:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.btn-submit-appointment:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================ */
+/*  PAGE SUCCÈS                                 */
+/* ============================================ */
+.appointment-success-card {
+  max-width: 560px;
+  margin: 80px auto;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 48px 40px;
+  text-align: center;
+}
+.success-icon-animation {
+  font-size: 56px;
+  color: #4ade80;
+  margin-bottom: 20px;
+  animation: pop 0.4s ease;
+}
+@keyframes pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.appointment-success-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text, #f1f5f9);
+  margin-bottom: 10px;
+}
+.appointment-success-card > p {
+  font-size: 14px;
+  color: var(--color-text-muted, #94a3b8);
+  margin-bottom: 28px;
+}
+.summary-box-premium {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px 24px;
+  text-align: left;
+  margin-bottom: 28px;
+}
+.summary-box-premium h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #a5b4fc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+.summary-box-premium p {
+  font-size: 14px;
+  color: var(--color-text, #e2e8f0);
+  margin-bottom: 8px;
+}
+.btn-return-dashboard-recruiter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.4);
+  color: #a5b4fc;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-return-dashboard-recruiter:hover {
+  background: rgba(99,102,241,0.25);
+}
+
+/* ============================================ */
+/*  BOUTON PLANIFIER (dans CandidatureBundle)  */
+/* ============================================ */
+.btn-plan-interview {
+  margin-top: 12px;
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn-plan-interview:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* ============================================ */
+/*  RESPONSIVE MOBILE                           */
+/* ============================================ */
+@media (max-width: 768px) {
+  .appointment-grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .appointment-container {
+    padding: 20px 16px;
+  }
+  .appointment-picker-workspace {
+    padding: 20px 16px;
+  }
+  .time-slots-grid {
+    gap: 8px;
+  }
+  .time-slot-bubble {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+}

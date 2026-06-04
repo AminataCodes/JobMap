@@ -1,0 +1,398 @@
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text-dark);
+
+}
+
+/* =========================
+    PAGE ANNONCE
+*/
+.annonce {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  min-height: 100vh;
+  background: #050b1f;
+  font-family: "Inter", sans-serif;
+}
+
+/* =========================
+   CARTES
+*/
+.annonce-entreprise,
+.annonce-post {
+  background: #1f2a44;
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow: 0 8px 30px rgba(40, 72, 152, 0.08);
+  border: 1px solid #e7ecf5;
+}
+
+/* Partie gauche */
+.annonce-entreprise {
+  width: 35%;
+  height: fit-content;
+}
+
+/* Partie droite */
+.annonce-post {
+  width: 65%;
+}
+
+/* =========================
+   HEADER
+*/
+.header {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.entreprise-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  min-width: 250px;
+}
+
+.details {
+  min-width: 120px;
+}
+
+.description-entreprise {
+  flex: 1;
+  min-width: 250px;
+}
+
+.entreprise-info img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #f4f7ff;
+  padding: 10px;
+}
+
+.entreprise-info h1 {
+  font-size: 30px;
+  color: #f4f5f8;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* =========================
+   DETAILS
+========================= */
+
+.details {
+  text-align: right;
+}
+
+.details p {
+  margin: 5px 0;
+  color: #7b8794;
+  font-size: 15px;
+}
+
+/* =========================
+   TITRE DU POSTE
+*/
+.annonce-entreprise p {
+  color: #e3e8ef;
+  line-height: 1.7;
+}
+
+/* =========================
+   TITRES
+*/
+h2 {
+  color: #d1defb;
+  margin-top: 30px;
+  margin-bottom: 12px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* =========================
+   TEXTE
+*/
+.annonce-post p,
+.annonce-entreprise p {
+  color: #d6e7fb;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+/* =========================
+   BOUTONS
+*/
+button {
+  margin-top: 25px;
+  background: linear-gradient(135deg, #2f66f6, #3f7cff);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 6px 18px rgba(47, 102, 246, 0.25);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2556d8, #2f66f6);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media screen and (max-width: 1000px) {
+  .annonce {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .annonce-entreprise,
+  .annonce-post {
+    width: 100%;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .details {
+    text-align: left;
+  }
+}
+
+
+/* =========================
+   PAGE CANDIDATURE
+========================= */
+
+.candidature {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  font-family: "Inter", sans-serif;
+  position: relative;
+  overflow: hidden;
+
+  /* Background principal */
+  background: linear-gradient(135deg, #eef4ff, #dfeaff);
+}
+
+/* =========================
+   EMOJIS EN BACKGROUND
+*/
+
+.candidature::before {
+  content: "🎓 💻 📚 ✨ 🧑🏽‍🎓 🚀 ☕ 📖 🎧 📝";
+  position: absolute;
+  top: 5%;
+  left: -5%;
+  width: 120%;
+  font-size: 55px;
+  opacity: 0.08;
+  line-height: 120px;
+  transform: rotate(-10deg);
+  pointer-events: none;
+}
+
+.candidature::after {
+  content: "📱 🌍 🖥️ 🧠 📚 🎓 💡 🚀 🧋";
+  position: absolute;
+  bottom: 5%;
+  right: -5%;
+  width: 120%;
+  font-size: 50px;
+  opacity: 0.08;
+  line-height: 120px;
+  transform: rotate(8deg);
+  pointer-events: none;
+}
+
+/* =========================
+   TITRE
+*/
+.candidature h1 {
+  font-size: 42px;
+  color: #16213e;
+  margin-bottom: 35px;
+  font-weight: 800;
+  z-index: 2;
+}
+
+/* =========================
+   FORMULAIRE 
+*/
+.candidature form {
+  width: 100%;
+  max-width: 700px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 45px;
+  border-radius: 30px;
+  box-shadow: 0 10px 35px rgba(40, 72, 152, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid #e8eefc;
+  z-index: 2;
+}
+
+/* =========================
+   LABELS
+*/
+.candidature label {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1f2a44;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+/* =========================
+   INPUTS
+*/
+.candidature input,
+.candidature select,
+.candidature textarea {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid #d8e2f0;
+  background: #f9fbff;
+  font-size: 16px;
+  margin-top: 8px;
+  transition: 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Focus */
+
+.candidature input:focus,
+.candidature select:focus,
+.candidature textarea:focus {
+  outline: none;
+  border: 1px solid #2f66f6;
+  box-shadow: 0 0 0 4px rgba(47, 102, 246, 0.12);
+  background: white;
+}
+
+/* =========================
+   TEXTAREA
+*/
+.candidature textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* =========================
+   INPUT FILE
+*/
+.candidature input[type="file"] {
+  background: white;
+  padding: 14px;
+  cursor: pointer;
+}
+
+/* =========================
+   BOUTON
+*/
+.candidature button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 16px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #2f66f6, #4f85ff);
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 8px 25px rgba(47, 102, 246, 0.25);
+}
+
+.candidature button:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #2556d8, #2f66f6);
+}
+
+/* =========================
+   MESSAGE SUCCÈS
+*/
+.candidature p {
+  line-height: 1.7;
+}
+
+.candidature p[style] {
+  background: #e9fff1;
+  padding: 15px;
+  border-radius: 14px;
+  border: 1px solid #b9f3ca;
+  text-align: center;
+}
+
+/* =========================
+   RESPONSIVE
+*/
+@media screen and (max-width: 768px) {
+  .candidature h1 {
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .candidature form {
+    padding: 30px 20px;
+  }
+
+  .candidature::before,
+  .candidature::after {
+    font-size: 35px;
+  }
+}
+
+.global-toggle-container {
+  position: fixed;
+  top: 30px;
+  right: 40px;
+  z-index: 9999; /* Pour qu'il reste toujours au-dessus du reste du contenu */
+}
+
+/* On ajuste légèrement le style du bouton pour qu'il soit parfait en flottant */
+.theme-toggle-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  background: var(--bg-input);
+}
+

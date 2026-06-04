@@ -1,0 +1,113 @@
+/* ── Page sans sidebar ── */
+.cal__page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.cal__page .cal__main {
+  margin-left: 0;
+  padding: 40px;
+}
+
+/* ── Barre de chargement ── */
+.cal__loading-bar {
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.3);
+  color: #a5b4fc;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* ── Stat purple ── */
+.cal__stat--purple .cal__stat-value { color: #8B5CF6; }
+
+/* ── Événement RDV backend (cliquable) ── */
+.cal__panel-event--rdv {
+  cursor: pointer;
+}
+.cal__panel-event--rdv:hover {
+  background: var(--color-surface-2);
+}
+
+/* ── Statut RDV dans le panel ── */
+.cal__rdv-statut {
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+.cal__rdv-statut--en_attente { color: #F59E0B; }
+.cal__rdv-statut--accepte    { color: #10B981; }
+.cal__rdv-statut--refuse     { color: #EF4444; }
+
+/* ── Bouton détail → ── */
+.cal__panel-event-detail-btn {
+  background: rgba(99,102,241,0.15);
+  border: none;
+  color: #a5b4fc;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.cal__panel-event-detail-btn:hover {
+  background: rgba(99,102,241,0.3);
+}
+
+/* ── Modal détail RDV ── */
+.rdv-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+  gap: 12px;
+}
+.rdv-detail-row:last-child {
+  border-bottom: none;
+}
+.rdv-detail-row--column {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.rdv-detail-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.rdv-detail-value {
+  font-size: 13px;
+  color: var(--text-dark);
+  font-weight: 500;
+  text-align: right;
+}
+.rdv-detail-message {
+  font-size: 13px;
+  color: var(--text-dark);
+  font-style: italic;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.rdv-visio-link {
+  font-size: 13px;
+  color: #6366f1;
+  font-weight: 600;
+  text-decoration: none;
+}
+.rdv-visio-link:hover {
+  text-decoration: underline;
+}
+.rdv-statut-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.rdv-statut--en_attente { background: rgba(245,158,11,0.15); color: #F59E0B; }
+.rdv-statut--accepte    { background: rgba(16,185,129,0.15); color: #10B981; }
+.rdv-statut--refuse     { background: rgba(239,68,68,0.15);  color: #EF4444; }

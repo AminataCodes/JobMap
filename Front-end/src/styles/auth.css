@@ -1,0 +1,447 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import './variables.css';
+
+/* ==========================================================================
+   1. RESET & CONFIGURATION GLOBALE
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ==========================================================================
+   2. STRUCTURE DE LA PAGE (LAYOUT)
+   ========================================================================== */
+.auth-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+/* ── Colonne Gauche (Formulaire) ── */
+.auth-card {
+  width: 480px;
+  min-width: 480px;
+  padding: 48px 56px;
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--color-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Variante pour le défilement si le contenu est long (Inscription) */
+.auth-card--scroll {
+  justify-content: flex-start;
+  overflow-y: auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+/* ==========================================================================
+   3. TYPOGRAPHIE & COMMONS
+   ========================================================================== */
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.auth-logo svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.auth-card h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.auth-card .subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+.bottom-text {
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.bottom-text a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.bottom-text a:hover { 
+  text-decoration: underline; 
+}
+
+/* ==========================================================================
+   4. ÉLÉMENTS DE FORMULAIRE (INPUTS, SELECT, TEXTAREA)
+   ========================================================================== */
+.form-row {
+  display: flex;
+  gap: 14px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper .input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--color-text-secondary);
+  display: flex;
+  pointer-events: none;
+}
+
+.input-wrapper input,
+.select-wrapper select,
+.form-group textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: var(--color-surface-2); /* Évite le flash blanc en mode sombre */
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+/* Ajustements spécifiques aux paddings d'icônes */
+.input-wrapper input {
+  padding-left: 40px;
+}
+
+.select-wrapper select {
+  padding-right: 40px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+/* États Focus & Placeholder */
+.input-wrapper input:focus,
+.select-wrapper select:focus,
+.form-group textarea:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.input-wrapper input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+.input-wrapper .toggle-password {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  display: flex;
+  padding: 0;
+}
+
+.select-wrapper { position: relative; }
+.select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  display: flex;
+}
+
+/* ── Zone d'Uploade de fichier ── */
+.upload-box {
+  border: 2px dashed var(--color-border);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  background-color: var(--color-surface-2);
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+}
+
+.upload-box:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+
+.upload-box input[type="file"] { display: none; }
+
+.upload-box-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.upload-box-icon {
+  color: var(--color-primary);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.upload-box-hint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.upload-box-filename {
+  font-size: 13px;
+  color: var(--color-primary);
+  font-weight: 500;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   5. BOUTONS, LIENS INTERACTIFS & ONGLETS
+   ========================================================================== */
+.tabs {
+  display: flex;
+  background-color: var(--color-surface-2);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-text-secondary);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+}
+
+.tabs button.active {
+  background-color: var(--color-primary);
+  color: #ffffff; /* Reste blanc pour le contraste sur l'indigo */
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.forgot-link {
+  display: block;
+  text-align: right;
+  font-size: 13px;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
+
+.forgot-link:hover { text-decoration: underline; }
+
+.primary-btn {
+  width: 100%;
+  padding: 13px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 18px;
+  margin-top: 4px;
+}
+
+.primary-btn:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   6. COLONNE DROITE (PANEL D'ILLUSTRATION & STATS)
+   ========================================================================== */
+.auth-panel {
+  flex: 1;
+  /* Utilisation d'un dégradé adaptatif défini selon le thème */
+  background: var(--auth-gradient, linear-gradient(145deg, #EFF6FF 0%, #DBEAFE 60%, #BFDBFE 100%));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.auth-panel-illustration {
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 28px;
+}
+
+.auth-panel-illustration svg,
+.auth-panel-illustration img {
+  width: 100%;
+  height: auto;
+}
+
+.auth-panel-text {
+  text-align: center;
+  max-width: 340px;
+  margin-bottom: 28px;
+}
+
+.auth-panel-text h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.auth-panel-text p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Encadré des statistiques ── */
+.auth-panel-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--color-surface);
+  border-radius: 14px;
+  padding: 16px 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 36px;
+  background-color: var(--color-border);
+}
+
+/* ==========================================================================
+   7. OVERRIDES SPÉCIFIQUES AU MODE SOMBRE (DARK MODE)
+   ========================================================================== */
+body.dark, [data-theme='dark'] {
+  /* On redéfinit le dégradé de droite pour qu'il soit sombre et immersif */
+  --auth-gradient: linear-gradient(145deg, #0B0F19 0%, #1E1B4B 50%, #111827 100%);
+}
+
+/* ==========================================================================
+   8. RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 900px) {
+  .auth-panel { 
+    display: none; 
+  }
+  .auth-card,
+  .auth-card--scroll {
+    width: 100%;
+    min-width: unset;
+    padding: 32px 24px;
+    border-right: none;
+  }
+}

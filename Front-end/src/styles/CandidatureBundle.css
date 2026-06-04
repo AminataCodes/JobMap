@@ -1,0 +1,564 @@
+/* ==========================================================================
+   STRUCTURE GLOBALE & CONTAINER
+   ========================================================================== */
+.bundle-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: var(--color-text);
+  box-sizing: border-box;
+}
+
+.bundle-header h1 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.bundle-header p {
+  color: var(--color-text-secondary);
+  margin-bottom: 32px;
+  font-size: 15px;
+}
+
+/* ── TIMELINE ÉTUDIANT (WORKSPACE) ── */
+.student-tracking-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .student-tracking-layout {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+.tracking-sidebar-list {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+
+.tracking-sidebar-list h3 {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--color-text-secondary);
+}
+
+.tracking-card-item {
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tracking-card-item:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.tracking-card-item.active {
+  border-color: var(--color-primary);
+  background: rgba(59, 130, 246, 0.08); /* Teinte subtile adaptative */
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.tracking-card-item h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tracking-card-item p {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.tracking-card-status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.tracking-timeline-workspace {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+
+/* ==========================================================================
+   CONSTRUCTEUR DE TIMELINE VISUELLE (CORRIGÉ AVEC LIGNE CONNECTRICE)
+   ========================================================================== */
+.visual-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 32px;
+  position: relative;
+}
+
+/* Génération de la ligne verticale adaptative */
+.visual-timeline::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  bottom: 16px;
+  width: 2px;
+  background: var(--color-border);
+  z-index: 1;
+}
+
+.timeline-node {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.node-icon-status {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+/* États colorimétriques de la timeline */
+.timeline-node.completed .node-icon-status {
+  background: #10b981;
+  color: #ffffff; /* Reste blanc pour un contraste maximal */
+  border-color: #10b981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+.timeline-node.current .node-icon-status {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.node-text-content h5 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.node-text-content p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+/* ==========================================================================
+   DASHBOARD RECRUTEUR : GRILLE & TABLEAUX (ANTI-DARK FLASH)
+   ========================================================================== */
+.recruiter-table-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+
+.recruiter-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Entête du tableau stylisé pour éviter le texte noir illisible en Dark Mode */
+.recruiter-grid-table th {
+  background-color: var(--color-surface-2);
+  color: var(--color-text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  padding: 16px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.recruiter-grid-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.recruiter-grid-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Effet de survol des lignes */
+.recruiter-grid-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.recruiter-grid-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.avatar-mini-circle {
+  width: 36px;
+  height: 36px;
+  background: var(--color-primary);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  margin-right: 12px;
+}
+
+.table-candidate-identity {
+  display: flex;
+  align-items: center;
+}
+
+.table-candidate-identity div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.table-candidate-identity small {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.status-badge-table {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-primary);
+}
+
+/* ==========================================================================
+   MINI RÉSUMÉ RECRUTEUR & FORMULAIRES PREMIUM
+   ========================================================================== */
+.detail-recruiter-split-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+@media (min-width: 968px) {
+  .detail-recruiter-split-layout {
+    grid-template-columns: 1fr 400px;
+  }
+}
+
+.candidate-mini-resume-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.large-avatar-placeholder {
+  width: 72px;
+  height: 72px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #ffffff;
+  font-weight: 800;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+}
+
+.resume-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 24px 0;
+}
+
+.resume-skill-tag {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Éléments de Formulaires Sécurisés pour le Dark Mode */
+.select-premium-dropdown {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  margin-top: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.select-premium-dropdown:focus {
+  border-color: var(--color-primary);
+}
+
+/* Évite les options invisibles (ex: texte blanc sur fond blanc en light mode natif) */
+.select-premium-dropdown option {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* Boutons d'actions */
+.btn-open-detail-recruiter {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-open-detail-recruiter:hover {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+.btn-download-candidate-cv {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-text);
+  color: var(--color-surface);
+  padding: 14px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  margin-top: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: opacity 0.2s;
+}
+
+.btn-download-candidate-cv:hover {
+  opacity: 0.9;
+}
+
+.btn-back-dashboard {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ============================
+   Page de depot de candidature
+   ============================ */
+
+.bundle-container {
+  min-height: 100vh;
+  background: #050b1f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+}
+
+.bundle-card {
+  width: 100%;
+  max-width: 700px;
+  background: #1f2a44;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 28px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.bundle-card h2 {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: #aab4d0;
+  margin-bottom: 35px;
+  font-size: 1rem;
+}
+
+.bundle-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row input {
+  flex: 1;
+}
+
+.bundle-form input,
+.bundle-form select,
+.bundle-form textarea {
+  width: 100%;
+  background: #2a3653;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 15px 18px;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.bundle-form input::placeholder,
+.bundle-form textarea::placeholder {
+  color: #9ca8c6;
+}
+
+.bundle-form input:focus,
+.bundle-form select:focus,
+.bundle-form textarea:focus {
+  border-color: #5b7cff;
+  box-shadow: 0 0 0 4px rgba(91,124,255,0.15);
+}
+
+.bundle-form textarea {
+  resize: none;
+  min-height: 120px;
+}
+
+.bundle-upload {
+  background: #2a3653;
+  border: 2px dashed rgba(91,124,255,0.5);
+  border-radius: 18px;
+  padding: 30px;
+  cursor: pointer;
+  text-align: center;
+  color: #c7d2f1;
+  transition: 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.bundle-upload:hover {
+  border-color: #5b7cff;
+  background: #313f61;
+}
+
+.bundle-upload input {
+  display: none;
+}
+
+.bundle-upload svg {
+  color: #5b7cff;
+}
+
+.btn-submit {
+  background: linear-gradient(
+    135deg,
+    #4f6df5,
+    #6b4cff
+  );
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(91,124,255,0.35);
+}
+
+.toast-success {
+  margin-top: 10px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  padding: 14px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.max-600 {
+  max-width: 700px;
+}
+
+@media (max-width: 768px) {
+  .bundle-card {
+    padding: 25px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .bundle-card h2 {
+    font-size: 1.6rem;
+  }
+}

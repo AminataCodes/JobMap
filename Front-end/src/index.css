@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ──────────────────────────────────────────
+   1. MODE CLAIR (LIGHT MODE) - PAR DÉFAUT
+   ────────────────────────────────────────── */
+:root {
+  /* Brand color */
+  --color-primary: #4F46E5;       /* Un bel Indigo moderne et visible */
+  --color-primary-dark: #4338CA;
+  
+  /* Backgrounds */
+  --color-background: #F8FAFC;    /* Fond de page légèrement grisé (très doux) */
+  --color-surface: #FFFFFF;       /* Fond des cartes et de la sidebar (blanc pur) */
+  --color-surface-2: #F1F5F9;     /* Fond des inputs et états hover (gris clair) */
+  
+  /* Bordures (pour séparer proprement les blocs) */
+  --color-border: #E2E8F0;        
+  
+  /* Textes (CORRECTION INVISIBILITÉ) */
+  --color-text: #0F172A;          /* Presque noir, ultra lisible */
+  --color-text-secondary: #64748B;/* Gris moyen pour les rôles/dates, aucun texte ne disparaît */
+  
+  /* Utilitaires */
+  --radius-md: 12px;
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* ──────────────────────────────────────────
+   2. MODE SOMBRE (VRAI DARK MODE PROFOND)
+   ────────────────────────────────────────── */
+/* Si ton ThemeContext applique la classe 'dark' sur le <body> ou le <html> */
+body.dark, [data-theme='dark'] {
+  /* Brand color (on l'éclaircit un poil pour le contraste sur fond noir) */
+  --color-primary: #6366F1;       
+  --color-primary-dark: #4F46E5;
+  
+  /* Backgrounds (Vrai noir/bleu nuit haut de gamme) */
+  --color-background: #0B0F19;    /* Fond de page très sombre */
+  --color-surface: #111827;       /* Sidebar et cartes un poil plus claires */
+  --color-surface-2: #1F2937;     /* Hover et inputs */
+  
+  /* Bordures sombres mais visibles */
+  --color-border: #1F2937;        
+  
+  /* Textes */
+  --color-text: #F8FAFC;          /* Blanc cassé pour ne pas détruire les yeux */
+  --color-text-secondary: #94A3B8;/* Gris clair pour les infos secondaires */
+  
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+/* ──────────────────────────────────────────
+   3. APPLICATION GENERALE (À NE PAS OUBLIER)
+   ────────────────────────────────────────── */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-main), sans-serif;
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+/* ===================================================
+   2. styles globaux
+=================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* On force la hauteur complète et les couleurs dynamiques sur toute l'application */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+a{
+  text-decoration: none;
+}
+
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
