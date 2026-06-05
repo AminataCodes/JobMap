@@ -12,15 +12,9 @@ model Etudiant {
   nom             String
   prenom          String
   motDePasse      String
-  niveauEtude     String?
-  cvUrl           String?
-  bio             String?           // ← AJOUT
-  competences     String[]          // ← AJOUT (tableau de strings PostgreSQL)
   emailVerified   Boolean       @default(false)
   verifyToken     String?
   candidatures    Candidature[]
-  messagesRecus   Message[]     @relation("MessagesRecus")
-  messagesEnvoyes Message[]     @relation("MessagesEnvoyes")
 }
 
 model Entreprise {

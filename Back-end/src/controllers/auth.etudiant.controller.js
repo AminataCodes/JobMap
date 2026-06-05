@@ -10,9 +10,7 @@ import { sendVerificationEmail } from '../services/email.service.js'
 export const register = async (req, res) => {
     try {
         console.log('BODY reçu:', req.body)
-        console.log('FILE reçu:', req.file)
-
-        const { email, nom, prenom, motDePasse, niveauEtude } = req.body
+        const { email, nom, prenom, motDePasse } = req.body
 
         if (!email || !nom || !prenom || !motDePasse) {
             return res.status(400).json({
@@ -28,11 +26,6 @@ export const register = async (req, res) => {
 
         const hash = await bcrypt.hash(motDePasse, 12)
 
-        let cvUrl = null
-        if (req.file) {
-            cvUrl = await uploadFile(req.file, 'cv')
-        }
-
         const verifyToken = uuidv4()
 
         const etudiant = await prisma.etudiant.create({
@@ -41,8 +34,6 @@ export const register = async (req, res) => {
                 nom,
                 prenom,
                 motDePasse: hash,
-                niveauEtude: niveauEtude || null,
-                cvUrl,
                 verifyToken,
                 emailVerified: true,
             },
