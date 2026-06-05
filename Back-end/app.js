@@ -1,10 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-
-import annonceRoutes from './src/routes/annonce.routes.js'
-import entrepriseRoutes from './src/routes/entreprise.routes.js'
 import authEtudiantRoutes from './src/routes/auth.etudiant.routes.js'
-import authEntrepriseRoutes from './src/routes/auth.entreprise.routes.js'
 import candidatureRoutes from './src/routes/candidature-route.js'
 import rendezvousRoutes from './src/routes/rendezvous.routes.js'
 
@@ -14,10 +10,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) // ← AJOUTE CETTE LIGNE
 
-app.use('/api/annonces', annonceRoutes)
-app.use('/api/entreprises', entrepriseRoutes)
 app.use('/api/auth/etudiant', authEtudiantRoutes)
-app.use('/api/auth/entreprise', authEntrepriseRoutes)
 app.use('/api/', candidatureRoutes)
 app.use('/api/rendezvous', rendezvousRoutes)
  

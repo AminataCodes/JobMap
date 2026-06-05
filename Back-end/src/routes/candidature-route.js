@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken, isEtudiant, isEntreprise } from "../middlewares/auth.middleware.js";
+import { verifyToken, isEtudiant } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/upload.middleware.js";
 import {
   addCandidature,
