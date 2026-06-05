@@ -12,7 +12,6 @@ model Etudiant {
   nom             String
   prenom          String
   motDePasse      String
-  niveauEtude     String?
   cvUrl           String?
   bio             String?           // ← AJOUT
   competences     String[]          // ← AJOUT (tableau de strings PostgreSQL)
