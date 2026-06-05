@@ -63,7 +63,7 @@ export async function fetchCandidatures(req, res) {
 }
 
 export async function fetchCandidaturesByAnnonce(
-  req,
+  req, 
   res
 ) {
   try {
