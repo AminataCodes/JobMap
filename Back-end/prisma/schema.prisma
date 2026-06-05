@@ -7,95 +7,46 @@ datasource db {
 }
 
 model Etudiant {
-  uid             String        @id @default(uuid())
-  email           String        @unique
-  nom             String
-  prenom          String
-  motDePasse      String
-  cvUrl           String?
-  bio             String?           // ← AJOUT
-  competences     String[]          // ← AJOUT (tableau de strings PostgreSQL)
-  emailVerified   Boolean       @default(false)
-  verifyToken     String?
-  candidatures    Candidature[]
-  messagesRecus   Message[]     @relation("MessagesRecus")
-  messagesEnvoyes Message[]     @relation("MessagesEnvoyes")
-}
+  uid            String         @id @default(uuid())
 
-model Entreprise {
-  uid           String    @id @default(uuid())
-  email         String    @unique
-  nomEntreprise String
-  description   String
-  logoUrl       String?
-  secteur       String?
-  motDePasse    String
-  emailVerified Boolean   @default(false)
-  verifyToken   String?
-  annonces      Annonce[]
-}
+  email          String         @unique
+  motDePasse     String
 
-model Annonce {
-  id                      String        @id @default(uuid())
-  entrepriseId            String
-  nomPoste                String
-  datePublication         DateTime      @default(now())
-  description             String
-  lieu                    String
-  competencesObligatoires String?
-  competencesSouhaitables String?
-  dateDeDebut             DateTime?
-  entreprise              Entreprise    @relation(fields: [entrepriseId], references: [uid])
-  candidatures            Candidature[]
+  nom            String
+  prenom         String
+
+  emailVerified  Boolean        @default(false)
+  verifyToken    String?
+
+  emailConnecte  Boolean        @default(false)
+  providerMail   MailProvider?
+
+  candidatures   Candidature[]
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model Candidature {
-  id                  String            @id @default(uuid())
-  annonceId           String
-  etudiantId          String
-  nomCandidat         String
-  prenom              String
-  lettreMotivationUrl String
-  messageAdditionnel  String?
-  statut              StatutCandidature @default(EN_ATTENTE)
-  createdAt           DateTime          @default(now())
-  annonce             Annonce           @relation(fields: [annonceId], references: [id])
-  etudiant            Etudiant          @relation(fields: [etudiantId], references: [uid])
-  rendezVous          RendezVous[]
+  id             String         @id @default(uuid())
+
+  nomPoste       String
+  nomEntreprise  String
+
+  plateforme     String?
+
+  dateDepot      DateTime
+
+  sourceUrl      String?
+
+  etudiantId     String
+  etudiant       Etudiant       @relation(fields: [etudiantId], references: [uid])
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
-model Message {
-  id             String   @id @default(uuid())
-  expediteurId   String
-  destinataireId String
-  contenu        String
-  createdAt      DateTime @default(now())
-  destinataire   Etudiant @relation("MessagesRecus", fields: [destinataireId], references: [uid])
-  expediteur     Etudiant @relation("MessagesEnvoyes", fields: [expediteurId], references: [uid])
-}
-
-model RendezVous {
-  id            String           @id @default(uuid())
-  candidatureId String
-  entrepriseId  String
-  etudiantId    String
-  dateProposee  DateTime
-  lieu          String?
-  lienVisio     String?
-  message       String?
-  statut        StatutRendezVous @default(EN_ATTENTE)
-  createdAt     DateTime         @default(now())
-  candidature   Candidature      @relation(fields: [candidatureId], references: [id])
-}
-
-enum StatutCandidature {
-  EN_ATTENTE
-  ACCEPTEE
-  REJETEE
-}
-
-enum StatutRendezVous {
-  EN_ATTENTE
-  ACCEPTE
-  REFUSE
+enum MailProvider {
+  GMAIL
+  OUTLOOK
 }
