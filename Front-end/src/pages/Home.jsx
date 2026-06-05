@@ -111,7 +111,7 @@ function Home() {
             <p>Les opportunités les plus fraîches, sélectionnées pour vous aujourd'hui.</p>
           </div>
           <button className="btn-text-link">
-            Voir toutes les offres ({ANNONCES_DU_JOUR.length}+) <FiArrowRight />
+            Voir toutes les offres Coumba ({ANNONCES_DU_JOUR.length}+) <FiArrowRight />
           </button>
         </div>
 
