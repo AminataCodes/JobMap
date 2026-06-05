@@ -17,16 +17,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (!token) return
 
-    const savedUser = (() => {
-      try { return JSON.parse(localStorage.getItem('user')) } catch { return null }
-    })()
-
-    const role = savedUser?.role
-    const profilUrl = role === 'entreprise'
-      ? '/api/auth/entreprise/profil'
-      : '/api/auth/etudiant/profil'
-
-    fetch(profilUrl, {
+    fetch('/api/auth/etudiant/profil', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {
@@ -34,7 +25,7 @@ export function AuthProvider({ children }) {
         return res.json()
       })
       .then(data => {
-        const updatedUser = { ...data, role: role || 'etudiant' }
+        const updatedUser = { ...data, role: 'etudiant' }
         localStorage.setItem('user', JSON.stringify(updatedUser))
         setUser(updatedUser)
       })
@@ -57,11 +48,12 @@ export function AuthProvider({ children }) {
     setUser(null)
     window.location.href = '/register'
   }
-  const isEtudiant = user?.role === "etudiant";
-  const isEntreprise = user?.role === "entreprise";
-  const isAuthenticated = !!user && !!localStorage.getItem("token");
+
+  const isEtudiant = user?.role === 'etudiant'
+  const isAuthenticated = !!user && !!localStorage.getItem('token')
+
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout, isEtudiant, isEntreprise, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, isEtudiant, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )

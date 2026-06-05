@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { FiCheckCircle, FiClock, FiFileText, FiMail, FiMapPin } from 'react-icons/fi'
+import {
+  FiCheckCircle, FiClock, FiFileText,
+  FiMail, FiMapPin, FiArrowLeft,
+  FiBriefcase, FiCalendar, FiActivity
+} from 'react-icons/fi'
 import '../styles/CandidatureBundle.css'
 
 const MOCK_CANDIDATS = {
@@ -11,7 +15,7 @@ const MOCK_CANDIDATS = {
     telephone: "+33 6 12 34 56 78",
     formation: "HETIC - Mastère Tech & Web Development",
     competences: ["React.js", "TypeScript", "Node.js", "Docker", "Tailwind CSS"],
-    bio: "Développeur passionné par les architectures Front-end scalables et l'optimisation des performances UI. Recherche une alternance de 12 mois.",
+    bio: "Développeur passionné par les architectures Front-end scalables et l'optimisation des performances UI.",
     experience: "Stage 6 mois chez EdTech Core - Dev Junior Front",
     cvUrl: "#"
   },
@@ -22,85 +26,140 @@ const MOCK_CANDIDATS = {
     telephone: "+33 7 99 88 77 66",
     formation: "HETIC - Bachelor Web UX/UI Design",
     competences: ["Figma", "Design System", "Prototypage Pro", "User Research"],
-    bio: "Créatrice d'interfaces centrées utilisateur. Spécialisée dans la conception de plateformes complexes SaaS et d'outils collaboratifs B2B.",
-    experience: "Designer UI Freelance - 1 an (Création de 4 app mobiles)",
+    bio: "Créatrice d'interfaces centrées utilisateur. Spécialisée dans la conception de plateformes SaaS.",
+    experience: "Designer UI Freelance - 1 an (4 app mobiles)",
     cvUrl: "#"
   }
 }
 
-const MOCK_CANDIDATURES_RECRUTEUR = [
-  { id: 1, candidatId: "101a", poste: "Développeur Front-end React (Alternance)", entreprise: "TechScale", date: "2026-05-25", statut: "Entretien RH" },
-  { id: 2, candidatId: "102a", poste: "Product Designer UI/UX (Stage)", entreprise: "Studio Pulse", date: "2026-05-24", statut: "Dossier en cours" }
+const MOCK_CANDIDATURES = [
+  { id: 1, candidatId: "101a", poste: "Développeur Front-end React", entreprise: "TechScale", lieu: "Paris (Hybride)", type: "Alternance", date: "25 mai 2026", statut: "Entretien RH" },
+  { id: 2, candidatId: "102a", poste: "Product Designer UI/UX", entreprise: "Studio Pulse", lieu: "Lyon", type: "Stage", date: "24 mai 2026", statut: "Dossier en cours" },
+  { id: 3, candidatId: "101a", poste: "Développeur React Native", entreprise: "AppFactory", lieu: "Full Remote", type: "CDI", date: "20 mai 2026", statut: "En attente" },
 ]
 
 const TIMELINE_STEPS = [
-  { id: 1, label: "Candidature Envoyée", desc: "Votre dossier a bien été transmis à l'entreprise." },
-  { id: 2, label: "Sélection sur CV", desc: "Le recruteur étudie vos compétences et votre profil." },
-  { id: 3, label: "Entretiens & Tests", desc: "Échanges techniques et RH en cours." },
-  { id: 4, label: "Décision Finale", desc: "Validation de l'offre ou feedback constructif." }
+  { label: "Candidature envoyée", desc: "Votre dossier a bien été transmis." },
+  { label: "Sélection sur CV", desc: "Le recruteur étudie votre profil." },
+  { label: "Entretiens & Tests", desc: "Échanges techniques et RH en cours." },
+  { label: "Décision finale", desc: "Validation ou feedback constructif." },
 ]
 
+const STATUS_CONFIG = {
+  "Entretien RH":       { color: "#6366f1", bg: "rgba(99,102,241,0.1)",  step: 2 },
+  "Entretien manager":  { color: "#8b5cf6", bg: "rgba(139,92,246,0.1)",  step: 2 },
+  "Dossier en cours":   { color: "#3b82f6", bg: "rgba(59,130,246,0.1)",  step: 1 },
+  "En attente":         { color: "#f59e0b", bg: "rgba(245,158,11,0.1)",   step: 0 },
+  "Signature contrat":  { color: "#10b981", bg: "rgba(16,185,129,0.1)",  step: 3 },
+  "Refusé":             { color: "#ef4444", bg: "rgba(239,68,68,0.1)",   step: 0 },
+}
+
 // ==========================================
-// 1. VUE ÉTUDIANT
+// 1. VUE ÉTUDIANT — LISTE + TIMELINE
 // ==========================================
 export function Candidatures() {
-  const [selectedApp, setSelectedApp] = useState(MOCK_CANDIDATURES_RECRUTEUR[0])
-
-  const getActiveStepIndex = (statut) => {
-    if (statut === "Dossier en cours") return 1
-    if (statut === "Entretien RH" || statut === "Entretien manager") return 2
-    if (statut === "Signature de contrat") return 3
-    return 0
-  }
-
-  const currentStepIndex = getActiveStepIndex(selectedApp.statut)
+  const [selected, setSelected] = useState(MOCK_CANDIDATURES[0])
+  const config = STATUS_CONFIG[selected.statut] || STATUS_CONFIG["En attente"]
+  const currentStep = config.step
 
   return (
-    <div className="bundle-container">
-      <div className="bundle-header">
-        <h1>📊 Suivi en temps réel de mes candidatures</h1>
-        <p>Suivez l'avancement de vos dossiers auprès des recruteurs partenaires.</p>
+    <div className="cand-page">
+
+      {/* HEADER */}
+      <div className="cand-header">
+        <div>
+          <h1>Mes candidatures</h1>
+          <p>{MOCK_CANDIDATURES.length} candidatures en cours</p>
+        </div>
+        <div className="cand-header-stat">
+          <FiActivity size={16} />
+          <span>{MOCK_CANDIDATURES.filter(c => c.statut === "Entretien RH" || c.statut === "Entretien manager").length} entretien(s) à venir</span>
+        </div>
       </div>
 
-      <div className="student-tracking-layout">
-        <div className="tracking-sidebar-list">
-          <h3>Mes candidatures en cours</h3>
-          {MOCK_CANDIDATURES_RECRUTEUR.map(app => (
-            <div
-              key={app.id}
-              className={`tracking-card-item ${selectedApp.id === app.id ? 'active' : ''}`}
-              onClick={() => setSelectedApp(app)}
-            >
-              <h4>{app.poste}</h4>
-              <p>{app.entreprise}</p>
-              <span className="tracking-card-status">{app.statut}</span>
-            </div>
-          ))}
+      <div className="cand-layout">
+
+        {/* SIDEBAR */}
+        <div className="cand-sidebar">
+          {MOCK_CANDIDATURES.map(app => {
+            const cfg = STATUS_CONFIG[app.statut] || STATUS_CONFIG["En attente"]
+            return (
+              <div
+                key={app.id}
+                className={`cand-card ${selected.id === app.id ? 'cand-card--active' : ''}`}
+                onClick={() => setSelected(app)}
+              >
+                <div className="cand-card-top">
+                  <span className="cand-type-tag">{app.type}</span>
+                  <span
+                    className="cand-status-dot"
+                    style={{ background: cfg.bg, color: cfg.color }}
+                  >
+                    {app.statut}
+                  </span>
+                </div>
+                <h3>{app.poste}</h3>
+                <p>{app.entreprise}</p>
+                <div className="cand-card-meta">
+                  <span><FiMapPin size={12} /> {app.lieu}</span>
+                  <span><FiCalendar size={12} /> {app.date}</span>
+                </div>
+              </div>
+            )
+          })}
         </div>
 
-        <div className="tracking-timeline-workspace">
-          <div className="workspace-card-top">
-            <h2>{selectedApp.poste}</h2>
-            <p className="company-tag">🏢 {selectedApp.entreprise} • Transmis le {selectedApp.date}</p>
+        {/* DETAIL */}
+        <div className="cand-detail">
+
+          {/* TITRE */}
+          <div className="cand-detail-header">
+            <div>
+              <h2>{selected.poste}</h2>
+              <span className="cand-detail-company">
+                <FiBriefcase size={14} /> {selected.entreprise} &nbsp;·&nbsp;
+                <FiMapPin size={14} /> {selected.lieu} &nbsp;·&nbsp;
+                <FiCalendar size={14} /> Envoyé le {selected.date}
+              </span>
+            </div>
+            <span
+              className="cand-status-big"
+              style={{
+                background: (STATUS_CONFIG[selected.statut] || STATUS_CONFIG["En attente"]).bg,
+                color: (STATUS_CONFIG[selected.statut] || STATUS_CONFIG["En attente"]).color,
+              }}
+            >
+              {selected.statut}
+            </span>
           </div>
 
-          <div className="visual-timeline">
-            {TIMELINE_STEPS.map((step, index) => {
-              const isCompleted = index < currentStepIndex
-              const isCurrent = index === currentStepIndex
+          {/* TIMELINE */}
+          <div className="cand-timeline">
+            {TIMELINE_STEPS.map((step, i) => {
+              const done = i < currentStep
+              const active = i === currentStep
               return (
-                <div key={step.id} className={`timeline-node ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
-                  <div className="node-icon-status">
-                    {isCompleted ? <FiCheckCircle /> : isCurrent ? <FiClock /> : <span>{step.id}</span>}
+                <div key={i} className={`cand-tl-node ${done ? 'done' : ''} ${active ? 'active' : ''}`}>
+                  <div className="cand-tl-line-wrap">
+                    <div className="cand-tl-dot">
+                      {done
+                        ? <FiCheckCircle size={14} />
+                        : active
+                          ? <FiClock size={14} />
+                          : <span>{i + 1}</span>
+                      }
+                    </div>
+                    {i < TIMELINE_STEPS.length - 1 && <div className="cand-tl-line" />}
                   </div>
-                  <div className="node-text-content">
-                    <h5>{step.label}</h5>
-                    <p>{step.desc}</p>
+                  <div className="cand-tl-text">
+                    <strong>{step.label}</strong>
+                    <span>{step.desc}</span>
                   </div>
                 </div>
               )
             })}
           </div>
+
         </div>
       </div>
     </div>
@@ -108,51 +167,58 @@ export function Candidatures() {
 }
 
 // ==========================================
-// 2. VUE RECRUTEUR : LISTE CANDIDATURES
+// 2. VUE RECRUTEUR — TABLEAU
 // ==========================================
 export function CandidaturesPage() {
   const navigate = useNavigate()
   return (
-    <div className="bundle-container">
-      <div className="bundle-header">
-        <h1>🏢 Dashboard Recruteur — Candidatures Reçues</h1>
-        <p>Analysez les profils des étudiants d'HETIC ayant postulé à vos offres.</p>
+    <div className="cand-page">
+      <div className="cand-header">
+        <div>
+          <h1>Candidatures reçues</h1>
+          <p>{MOCK_CANDIDATURES.length} candidats ont postulé à vos offres</p>
+        </div>
       </div>
 
-      <div className="recruiter-table-container">
-        <table className="recruiter-grid-table">
+      <div className="cand-table-wrap">
+        <table className="cand-table">
           <thead>
             <tr>
               <th>Candidat</th>
               <th>Poste visé</th>
-              <th>Date de réception</th>
-              <th>Statut actuel</th>
+              <th>Date</th>
+              <th>Statut</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {MOCK_CANDIDATURES_RECRUTEUR.map((c) => {
-              const candidatInfo = MOCK_CANDIDATS[c.candidatId]
+            {MOCK_CANDIDATURES.map((c) => {
+              const candidat = MOCK_CANDIDATS[c.candidatId]
+              const cfg = STATUS_CONFIG[c.statut] || STATUS_CONFIG["En attente"]
               return (
                 <tr key={c.id}>
                   <td>
-                    <div className="table-candidate-identity">
-                      <div className="avatar-mini-circle">{candidatInfo.nom[0]}</div>
+                    <div className="cand-identity">
+                      <div className="cand-avatar">{candidat.nom[0]}</div>
                       <div>
-                        <strong>{candidatInfo.nom}</strong>
-                        <small>{candidatInfo.formation}</small>
+                        <strong>{candidat.nom}</strong>
+                        <small>{candidat.formation}</small>
                       </div>
                     </div>
                   </td>
                   <td>{c.poste}</td>
                   <td>{c.date}</td>
-                  <td><span className="status-badge-table">{c.statut}</span></td>
+                  <td>
+                    <span className="cand-badge" style={{ background: cfg.bg, color: cfg.color }}>
+                      {c.statut}
+                    </span>
+                  </td>
                   <td>
                     <button
-                      className="btn-open-detail-recruiter"
+                      className="cand-btn-eval"
                       onClick={() => navigate(`/candidaturedetail/`)}
                     >
-                      Évaluer le profil →
+                      Évaluer →
                     </button>
                   </td>
                 </tr>
@@ -166,258 +232,178 @@ export function CandidaturesPage() {
 }
 
 // ==========================================
-// 3. VUE RECRUTEUR DÉTAILLÉE
+// 3. VUE RECRUTEUR — DÉTAIL
 // ==========================================
 export function CandidatureDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-
-  const candidature = MOCK_CANDIDATURES_RECRUTEUR.find(c => c.id === parseInt(id)) || MOCK_CANDIDATURES_RECRUTEUR[0]
+  const candidature = MOCK_CANDIDATURES.find(c => c.id === parseInt(id)) || MOCK_CANDIDATURES[0]
   const candidat = MOCK_CANDIDATS[candidature.candidatId]
-
   const [currentStatut, setCurrentStatut] = useState(candidature.statut)
 
   return (
-    <div className="bundle-container">
-      <button className="btn-back-dashboard" onClick={() => navigate('/candidatures')}>← Retour au Dashboard</button>
+    <div className="cand-page">
+      <button className="cand-back-btn" onClick={() => navigate('/candidatures')}>
+        <FiArrowLeft size={15} /> Retour
+      </button>
 
-      <div className="detail-recruiter-split-layout">
+      <div className="cand-detail-split">
 
-        {/* BLOC GAUCHE : RÉSUMÉ CANDIDAT */}
-        <div className="candidate-mini-resume-panel">
-          <div className="resume-header-card">
-            <div className="large-avatar-placeholder">{candidat.nom[0]}</div>
-            <h2>{candidat.nom}</h2>
-            <p className="resume-sub-title">🎓 {candidat.formation}</p>
+        {/* RÉSUMÉ CANDIDAT */}
+        <div className="cand-resume-panel">
+          <div className="cand-resume-top">
+            <div className="cand-big-avatar">{candidat.nom[0]}</div>
+            <div>
+              <h2>{candidat.nom}</h2>
+              <p>{candidat.formation}</p>
+            </div>
           </div>
 
-          <div className="resume-section-body">
-            <h4>💡 À propos du profil</h4>
-            <p className="candidate-bio-text">"{candidat.bio}"</p>
+          <div className="cand-resume-section">
+            <h4>À propos</h4>
+            <p>{candidat.bio}</p>
+          </div>
 
-            <h4>🛠️ Compétences clés</h4>
-            <div className="resume-skills-grid">
-              {candidat.competences.map((skill, idx) => (
-                <span key={idx} className="resume-skill-tag">{skill}</span>
+          <div className="cand-resume-section">
+            <h4>Compétences</h4>
+            <div className="cand-skills">
+              {candidat.competences.map((s, i) => (
+                <span key={i} className="cand-skill-tag">{s}</span>
               ))}
             </div>
-
-            <h4>💼 Dernière expérience</h4>
-            <p className="candidate-experience-text">🔹 {candidat.experience}</p>
-
-            <div className="resume-contact-footer">
-              <h4>📞 Coordonnées</h4>
-              <p><FiMail size={14} /> {candidat.email}</p>
-              <p><FiMapPin size={14} /> Paris, France</p>
-            </div>
-
-            <a href={candidat.cvUrl} className="btn-download-candidate-cv" download>
-              <FiFileText size={16} /> Consulter le CV Original (PDF)
-            </a>
           </div>
+
+          <div className="cand-resume-section">
+            <h4>Expérience</h4>
+            <p>{candidat.experience}</p>
+          </div>
+
+          <div className="cand-resume-section">
+            <h4>Contact</h4>
+            <p><FiMail size={13} /> {candidat.email}</p>
+            <p><FiMapPin size={13} /> Paris, France</p>
+          </div>
+
+          <a href={candidat.cvUrl} className="cand-cv-btn" download>
+            <FiFileText size={15} /> Télécharger le CV
+          </a>
         </div>
 
-        {/* BLOC DROITE : ACTIONS RECRUTEUR */}
-        <div className="recruiter-action-decision-panel">
-          <div className="decision-box-card">
-            <h3>⚙️ Pilotage du Statut</h3>
-            <p>Modifiez l'état d'avancement pour mettre à jour automatiquement la timeline de l'étudiant.</p>
+        {/* ACTIONS */}
+        <div className="cand-action-panel">
+          <h3>Mettre à jour le statut</h3>
+          <p>La timeline de l'étudiant sera mise à jour automatiquement.</p>
 
-            <div className="select-status-wrapper">
-              <label>Statut de la candidature :</label>
-              <select
-                value={currentStatut}
-                onChange={(e) => setCurrentStatut(e.target.value)}
-                className="select-premium-dropdown"
-              >
-                <option value="Dossier en cours">Dossier en cours</option>
-                <option value="Entretien RH">Entretien RH</option>
-                <option value="Entretien manager">Entretien manager</option>
-                <option value="Signature de contrat">Signature de contrat</option>
-              </select>
-            </div>
+          <label>Statut de la candidature</label>
+          <select
+            value={currentStatut}
+            onChange={(e) => setCurrentStatut(e.target.value)}
+            className="cand-select"
+          >
+            <option value="En attente">En attente</option>
+            <option value="Dossier en cours">Dossier en cours</option>
+            <option value="Entretien RH">Entretien RH</option>
+            <option value="Entretien manager">Entretien manager</option>
+            <option value="Signature contrat">Signature contrat</option>
+            <option value="Refusé">Refusé</option>
+          </select>
 
-            <div className="decision-action-buttons">
-              <button
-                className="btn-validate-decision"
-                onClick={() => alert('Statut sauvegardé avec succès !')}
-              >
-                Enregistrer la décision
-              </button>
+          <button
+            className="cand-btn-save"
+            onClick={() => alert('Statut mis à jour !')}
+          >
+            Enregistrer
+          </button>
 
-              {/* ✅ NOUVEAU BOUTON PLANIFIER ENTRETIEN */}
-              <button
-                className="btn-plan-interview"
-                onClick={() => navigate('/entretiens', {
-                  state: {
-                    candidatureId: candidature.id,
-                    candidateName: candidat.nom,
-                    poste: candidature.poste,
-                    email: candidat.email
-                  }
-                })}
-              >
-                📅 Planifier un entretien
-              </button>
-            </div>
-          </div>
+          <button
+            className="cand-btn-interview"
+            onClick={() => navigate('/entretiens', {
+              state: {
+                candidatureId: candidature.id,
+                candidateName: candidat.nom,
+                poste: candidature.poste,
+                email: candidat.email
+              }
+            })}
+          >
+            <FiCalendar size={15} /> Planifier un entretien
+          </button>
         </div>
 
       </div>
     </div>
   )
 }
+
 // ==========================================
-// 4. VUE ÉTUDIANT : LE FORMULAIRE DE CANDIDATURE INSTANTANÉE
+// 4. FORMULAIRE CANDIDATURE
 // ==========================================
 export function Candidature() {
-  const { id : annonceId } = useParams();
-
-  const [formData, setFormData] =
-    useState({
-      nomCandidat: "",
-      prenom: "",
-      lettreMotivation: null,
-      messageAdditionnel: "",
-    });
-
-  const [messageEnvoye, setMessageEnvoye] =
-    useState(false);
+  const { id: annonceId } = useParams()
+  const [formData, setFormData] = useState({
+    nomCandidat: "", prenom: "", lettreMotivation: null, messageAdditionnel: "",
+  })
+  const [messageEnvoye, setMessageEnvoye] = useState(false)
 
   const handleChange = (e) => {
-    const { name, value, files } =
-      e.target;
-
-    setFormData({
-      ...formData,
-      [name]: files
-        ? files[0]
-        : value,
-    });
-  };
+    const { name, value, files } = e.target
+    setFormData({ ...formData, [name]: files ? files[0] : value })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
+    e.preventDefault()
     try {
-      const data =
-        new FormData();
-
-      data.append(
-        "nomCandidat",
-        formData.nomCandidat
-      );
-
-      data.append(
-        "prenom",
-        formData.prenom
-      );
-
-      data.append(
-        "messageAdditionnel",
-        formData.messageAdditionnel
-      );
-
-      data.append(
-        "lettreMotivation",
-        formData.lettreMotivation
-      );
-
-      const response =
-        await fetch(
-          `http://localhost:3000/api/annonce/${annonceId}/candidature`,
-          {
-            method: "POST",
-
-            headers: {
-              Authorization:
-                `Bearer ${localStorage.getItem("token")}`,
-            },
-
-            body: data,
-          }
-        );
-
-      const result =
-        await response.json();
-
-      if (response.ok) {
-        setMessageEnvoye(true);
-      } else {
-        alert(result.error);
-      }
+      const data = new FormData()
+      data.append("nomCandidat", formData.nomCandidat)
+      data.append("prenom", formData.prenom)
+      data.append("messageAdditionnel", formData.messageAdditionnel)
+      data.append("lettreMotivation", formData.lettreMotivation)
+      const response = await fetch(`http://localhost:3000/api/annonce/${annonceId}/candidature`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        body: data,
+      })
+      const result = await response.json()
+      if (response.ok) setMessageEnvoye(true)
+      else alert(result.error)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
-
-  
+  }
 
   return (
-    <div className="bundle-container">
-      <div className="bundle-card max-600">
-        <h2>
-          Formulaire de candidature
-        </h2>
+    <div className="cand-form-page">
+      <div className="cand-form-card">
+        <h2>Formulaire de candidature</h2>
+        <p>Complétez les informations ci-dessous pour postuler.</p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bundle-form"
-        >
-          <input
-            type="text"
-            name="nomCandidat"
-            placeholder="Nom"
-            onChange={handleChange}
-            required
-          />
+        <form onSubmit={handleSubmit} className="cand-form">
+          <div className="cand-form-row">
+            <input type="text" name="nomCandidat" placeholder="Nom" onChange={handleChange} required />
+            <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} required />
+          </div>
 
-          <input
-            type="text"
-            name="prenom"
-            placeholder="Prénom"
-            onChange={handleChange}
-            required
-          />
-
-          <label className="bundle-upload">
-            <input
-              type="file"
-              name="lettreMotivation"
-              onChange={handleChange}
-              required
-            />
-
-            <span>
-              {formData.lettreMotivation
-                ? formData
-                    .lettreMotivation
-                    .name
-                : "Déposez votre lettre de motivation"}
-            </span>
+          <label className="cand-upload">
+            <input type="file" name="lettreMotivation" onChange={handleChange} required />
+            <FiFileText size={20} />
+            <span>{formData.lettreMotivation ? formData.lettreMotivation.name : "Déposez votre lettre de motivation"}</span>
           </label>
 
           <textarea
             name="messageAdditionnel"
-            placeholder="Message..."
+            placeholder="Message complémentaire (optionnel)..."
             onChange={handleChange}
           />
 
-          <button
-            type="submit"
-            className="btn-submit"
-          >
-            Soumettre
-          </button>
+          <button type="submit" className="cand-form-submit">Soumettre ma candidature</button>
 
           {messageEnvoye && (
-            <div className="toast-success">
-              <FiCheckCircle />
-              Transmis avec succès !
+            <div className="cand-toast">
+              <FiCheckCircle /> Candidature transmise avec succès !
             </div>
           )}
         </form>
       </div>
     </div>
-  );
+  )
 }
