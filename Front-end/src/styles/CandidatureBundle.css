@@ -1,564 +1,326 @@
-/* ==========================================================================
-   STRUCTURE GLOBALE & CONTAINER
-   ========================================================================== */
-.bundle-container {
-  max-width: 1200px;
+/* =========================
+   GLOBAL
+========================= */
+
+.cand-page {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 20px;
-  color: var(--color-text);
+  padding: 40px 24px;
   box-sizing: border-box;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
 }
 
-.bundle-header h1 {
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 6px;
-  letter-spacing: -0.5px;
-}
+/* =========================
+   HEADER
+========================= */
 
-.bundle-header p {
-  color: var(--color-text-secondary);
+.cand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 32px;
-  font-size: 15px;
 }
 
-/* ── TIMELINE ÉTUDIANT (WORKSPACE) ── */
-.student-tracking-layout {
+.cand-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cand-badge-count {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6366f1, #60a5fa);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+}
+
+.cand-header-left h1 {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cand-header-left p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 2px 0 0;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.cand-layout {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
 }
 
-@media (min-width: 768px) {
-  .student-tracking-layout {
-    grid-template-columns: 320px 1fr;
+@media (max-width: 900px) {
+  .cand-layout {
+    grid-template-columns: 1fr;
   }
 }
 
-.tracking-sidebar-list {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
-}
+/* =========================
+   LISTE
+========================= */
 
-.tracking-sidebar-list h3 {
-  font-size: 15px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: var(--color-text-secondary);
-}
-
-.tracking-card-item {
-  padding: 16px;
-  border-radius: 10px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-2);
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.tracking-card-item:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
-}
-
-.tracking-card-item.active {
-  border-color: var(--color-primary);
-  background: rgba(59, 130, 246, 0.08); /* Teinte subtile adaptative */
-  box-shadow: 0 0 0 1px var(--color-primary);
-}
-
-.tracking-card-item h4 {
-  margin: 0 0 4px 0;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.tracking-card-item p {
-  margin: 0 0 8px 0;
-  font-size: 13px;
-  color: var(--color-text-secondary);
-}
-
-.tracking-card-status {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-}
-
-.tracking-timeline-workspace {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  padding: 32px;
-  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
-}
-
-/* ==========================================================================
-   CONSTRUCTEUR DE TIMELINE VISUELLE (CORRIGÉ AVEC LIGNE CONNECTRICE)
-   ========================================================================== */
-.visual-timeline {
+.cand-list {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  margin-top: 32px;
-  position: relative;
+  gap: 12px;
 }
 
-/* Génération de la ligne verticale adaptative */
-.visual-timeline::before {
-  content: "";
-  position: absolute;
-  top: 16px;
-  left: 18px;
-  bottom: 16px;
-  width: 2px;
-  background: var(--color-border);
-  z-index: 1;
+.cand-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
 
-.timeline-node {
+.cand-card:hover {
+  transform: translateY(-2px);
+  border-color: #c7d2fe;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.12);
+}
+
+.cand-card.active {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.cand-card-top {
   display: flex;
-  gap: 20px;
-  position: relative;
-  z-index: 2;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.node-icon-status {
+.cand-card-icon {
   width: 38px;
   height: 38px;
-  border-radius: 50%;
-  background: var(--color-surface-2);
-  border: 2px solid var(--color-border);
-  color: var(--color-text-secondary);
+  border-radius: 12px;
+  background: #eef2ff;
+  color: #6366f1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
+  font-size: 18px;
 }
 
-/* États colorimétriques de la timeline */
-.timeline-node.completed .node-icon-status {
-  background: #10b981;
-  color: #ffffff; /* Reste blanc pour un contraste maximal */
-  border-color: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
-}
-
-.timeline-node.current .node-icon-status {
-  background: var(--color-primary);
-  color: #ffffff;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
-}
-
-.node-text-content h5 {
-  margin: 0 0 4px 0;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.node-text-content p {
+.cand-card-info h4 {
   margin: 0;
-  font-size: 13px;
-  color: var(--color-text-secondary);
-}
-
-/* ==========================================================================
-   DASHBOARD RECRUTEUR : GRILLE & TABLEAUX (ANTI-DARK FLASH)
-   ========================================================================== */
-.recruiter-table-container {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
-}
-
-.recruiter-grid-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
   font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
 }
 
-/* Entête du tableau stylisé pour éviter le texte noir illisible en Dark Mode */
-.recruiter-grid-table th {
-  background-color: var(--color-surface-2);
-  color: var(--color-text-secondary);
-  font-weight: 700;
-  text-transform: uppercase;
+.cand-card-info span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.cand-card-bottom {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.cand-status-bar {
+  margin-top: 10px;
+}
+
+.cand-statut {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
   font-size: 11px;
-  letter-spacing: 0.8px;
-  padding: 16px;
-  border-bottom: 2px solid var(--color-border);
+  font-weight: 600;
+  background: #eef2ff;
+  color: #6366f1;
 }
 
-.recruiter-grid-table td {
-  padding: 16px;
-  border-bottom: 1px solid var(--color-border);
-  vertical-align: middle;
+/* =========================
+   DETAIL
+========================= */
+
+.cand-detail {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
-.recruiter-grid-table tr:last-child td {
-  border-bottom: none;
+.cand-detail-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-/* Effet de survol des lignes */
-.recruiter-grid-table tbody tr {
-  transition: background-color 0.2s ease;
+.cand-detail-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f172a;
 }
 
-.recruiter-grid-table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.02);
-}
-
-.avatar-mini-circle {
-  width: 36px;
-  height: 36px;
-  background: var(--color-primary);
-  color: #ffffff;
-  border-radius: 50%;
+.cand-detail-meta {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #64748b;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  margin-right: 12px;
+  gap: 12px;
 }
 
-.table-candidate-identity {
-  display: flex;
-  align-items: center;
+/* =========================
+   TIMELINE
+========================= */
+
+.cand-timeline h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #64748b;
+  margin-bottom: 18px;
 }
 
-.table-candidate-identity div {
+.timeline-track {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 18px;
 }
 
-.table-candidate-identity small {
-  color: var(--color-text-secondary);
-  font-size: 12px;
+.tl-node {
+  display: flex;
+  gap: 14px;
 }
 
-.status-badge-table {
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: rgba(59, 130, 246, 0.1);
-  color: var(--color-primary);
+.tl-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* ==========================================================================
-   MINI RÉSUMÉ RECRUTEUR & FORMULAIRES PREMIUM
-   ========================================================================== */
-.detail-recruiter-split-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-  margin-top: 24px;
-}
-
-@media (min-width: 968px) {
-  .detail-recruiter-split-layout {
-    grid-template-columns: 1fr 400px;
-  }
-}
-
-.candidate-mini-resume-panel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 32px;
-}
-
-.large-avatar-placeholder {
-  width: 72px;
-  height: 72px;
-  background: var(--color-primary);
+.tl-dot {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  color: #ffffff;
-  font-weight: 800;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+  color: #94a3b8;
 }
 
-.resume-skills-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0 24px 0;
+.tl-node.done .tl-dot {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #16a34a;
 }
 
-.resume-skill-tag {
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
+.tl-node.current .tl-dot {
+  background: #eef2ff;
+  border-color: #6366f1;
+  color: #6366f1;
 }
 
-/* Éléments de Formulaires Sécurisés pour le Dark Mode */
-.select-premium-dropdown {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  background: var(--color-surface-2);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  margin-top: 8px;
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.2s;
+.tl-line {
+  width: 2px;
+  flex: 1;
+  background: #e2e8f0;
+  margin-top: 6px;
 }
 
-.select-premium-dropdown:focus {
-  border-color: var(--color-primary);
+.tl-content strong {
+  font-size: 14px;
+  color: #0f172a;
+  display: block;
+  margin-bottom: 4px;
 }
 
-/* Évite les options invisibles (ex: texte blanc sur fond blanc en light mode natif) */
-.select-premium-dropdown option {
-  background: var(--color-surface);
-  color: var(--color-text);
+.tl-content p {
+  font-size: 12px;
+  color: #64748b;
 }
 
-/* Boutons d'actions */
-.btn-open-detail-recruiter {
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-open-detail-recruiter:hover {
-  background: var(--color-primary);
-  color: #ffffff;
-  border-color: var(--color-primary);
-}
-
-.btn-download-candidate-cv {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: var(--color-text);
-  color: var(--color-surface);
-  padding: 14px 24px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
-  margin-top: 24px;
-  width: 100%;
-  box-sizing: border-box;
-  transition: opacity 0.2s;
-}
-
-.btn-download-candidate-cv:hover {
-  opacity: 0.9;
-}
-
-.btn-back-dashboard {
-  background: none;
-  border: none;
-  color: var(--color-primary);
-  font-weight: 700;
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* ============================
-   Page de depot de candidature
-   ============================ */
-
-.bundle-container {
-  min-height: 100vh;
-  background: #050b1f;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 50px 20px;
-}
+/* =========================
+   FORMULAIRE
+========================= */
 
 .bundle-card {
-  width: 100%;
-  max-width: 700px;
-  background: #1f2a44;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 28px;
-  padding: 40px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-}
-
-.bundle-card h2 {
-  color: white;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.subtitle {
-  text-align: center;
-  color: #aab4d0;
-  margin-bottom: 35px;
-  font-size: 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
 .bundle-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.form-row {
-  display: flex;
-  gap: 15px;
-}
-
-.form-row input {
-  flex: 1;
+  gap: 14px;
 }
 
 .bundle-form input,
-.bundle-form select,
 .bundle-form textarea {
-  width: 100%;
-  background: #2a3653;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 15px 18px;
-  color: white;
-  font-size: 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #0f172a;
   outline: none;
-  transition: 0.3s ease;
-}
-
-.bundle-form input::placeholder,
-.bundle-form textarea::placeholder {
-  color: #9ca8c6;
+  transition: 0.2s;
 }
 
 .bundle-form input:focus,
-.bundle-form select:focus,
 .bundle-form textarea:focus {
-  border-color: #5b7cff;
-  box-shadow: 0 0 0 4px rgba(91,124,255,0.15);
-}
-
-.bundle-form textarea {
-  resize: none;
-  min-height: 120px;
+  border-color: #6366f1;
+  background: white;
 }
 
 .bundle-upload {
-  background: #2a3653;
-  border: 2px dashed rgba(91,124,255,0.5);
-  border-radius: 18px;
-  padding: 30px;
-  cursor: pointer;
+  border: 1px dashed #6366f1;
+  padding: 18px;
   text-align: center;
-  color: #c7d2f1;
-  transition: 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.bundle-upload:hover {
-  border-color: #5b7cff;
-  background: #313f61;
-}
-
-.bundle-upload input {
-  display: none;
-}
-
-.bundle-upload svg {
-  color: #5b7cff;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #6366f1;
+  background: #eef2ff;
 }
 
 .btn-submit {
-  background: linear-gradient(
-    135deg,
-    #4f6df5,
-    #6b4cff
-  );
-  color: white;
+  background: linear-gradient(135deg, #6366f1, #60a5fa);
   border: none;
-  border-radius: 16px;
-  padding: 15px;
-  font-size: 1rem;
+  padding: 12px;
+  border-radius: 12px;
+  color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: 0.2s;
 }
 
 .btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(91,124,255,0.35);
 }
 
 .toast-success {
-  margin-top: 10px;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  color: #34d399;
-  padding: 14px;
-  border-radius: 14px;
+  margin-top: 12px;
+  color: #16a34a;
+  font-size: 13px;
   display: flex;
-  align-items: center;
   gap: 10px;
-  font-weight: 500;
-}
-
-.max-600 {
-  max-width: 700px;
-}
-
-@media (max-width: 768px) {
-  .bundle-card {
-    padding: 25px;
-  }
-
-  .form-row {
-    flex-direction: column;
-  }
-
-  .bundle-card h2 {
-    font-size: 1.6rem;
-  }
+  align-items: center;
 }
