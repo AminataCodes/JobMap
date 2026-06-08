@@ -24,10 +24,3 @@ export const isEtudiant = (req, res, next) => {
     }
     next()
 }
-
-export const isEntreprise = (req, res, next) => {
-    if (req.user.role !== 'entreprise') {
-        return res.status(403).json({ message: 'Accès réservé aux entreprises' })
-    }
-    next()
-}
