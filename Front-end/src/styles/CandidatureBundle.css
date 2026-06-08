@@ -1,675 +1,326 @@
-/* ==========================================================================
-   PAGE PRINCIPALE
-   ========================================================================== */
+/* =========================
+   GLOBAL
+========================= */
+
 .cand-page {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 24px 80px;
-  color: var(--color-text);
+  padding: 40px 24px;
   box-sizing: border-box;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
+
 .cand-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 32px;
 }
 
-.cand-header h1 {
-  font-size: 24px;
-  font-weight: 800;
-  margin: 0 0 4px 0;
-  letter-spacing: -0.4px;
-}
-
-.cand-header p {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  margin: 0;
-}
-
-.cand-header-stat {
+.cand-header-left {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(99,102,241,0.08);
-  color: var(--color-primary);
-  padding: 8px 16px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
-  border: 1px solid rgba(99,102,241,0.2);
+  gap: 14px;
 }
 
-/* ==========================================================================
-   LAYOUT ÉTUDIANT
-   ========================================================================== */
+.cand-badge-count {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6366f1, #60a5fa);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+}
+
+.cand-header-left h1 {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cand-header-left p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 2px 0 0;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
 .cand-layout {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 360px 1fr;
   gap: 20px;
-  align-items: start;
 }
 
-/* SIDEBAR CARDS */
-.cand-sidebar {
+@media (max-width: 900px) {
+  .cand-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   LISTE
+========================= */
+
+.cand-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
 .cand-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
   padding: 16px;
   cursor: pointer;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: 0.25s;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
 
 .cand-card:hover {
-  border-color: var(--color-primary);
   transform: translateY(-2px);
+  border-color: #c7d2fe;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.12);
 }
 
-.cand-card--active {
-  border-color: var(--color-primary);
-  background: rgba(99,102,241,0.05);
-  box-shadow: 0 0 0 1px var(--color-primary);
+.cand-card.active {
+  border-color: #6366f1;
+  background: #eef2ff;
 }
 
 .cand-card-top {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 12px;
   margin-bottom: 10px;
 }
 
-.cand-type-tag {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-primary);
-  background: rgba(99,102,241,0.08);
-  padding: 3px 8px;
-  border-radius: 4px;
-}
-
-.cand-status-dot {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 20px;
-}
-
-.cand-card h3 {
-  font-size: 14px;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  line-height: 1.3;
-}
-
-.cand-card p {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  margin: 0 0 10px 0;
-}
-
-.cand-card-meta {
-  display: flex;
-  gap: 12px;
-  font-size: 12px;
-  color: var(--color-text-secondary);
-}
-
-.cand-card-meta span {
+.cand-card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #eef2ff;
+  color: #6366f1;
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  font-size: 18px;
 }
 
-/* DETAIL */
+.cand-card-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.cand-card-info span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.cand-card-bottom {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.cand-status-bar {
+  margin-top: 10px;
+}
+
+.cand-statut {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #eef2ff;
+  color: #6366f1;
+}
+
+/* =========================
+   DETAIL
+========================= */
+
 .cand-detail {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  padding: 28px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
 .cand-detail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 32px;
-  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .cand-detail-header h2 {
+  margin: 0;
   font-size: 20px;
-  font-weight: 800;
-  margin: 0 0 6px 0;
+  color: #0f172a;
 }
 
-.cand-detail-company {
+.cand-detail-meta {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #64748b;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.cand-status-big {
-  font-size: 13px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 20px;
-  white-space: nowrap;
-  flex-shrink: 0;
+/* =========================
+   TIMELINE
+========================= */
+
+.cand-timeline h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #64748b;
+  margin-bottom: 18px;
 }
 
-/* TIMELINE */
-.cand-timeline {
+.timeline-track {
   display: flex;
   flex-direction: column;
+  gap: 18px;
 }
 
-.cand-tl-node {
+.tl-node {
   display: flex;
-  gap: 16px;
+  gap: 14px;
 }
 
-.cand-tl-line-wrap {
+.tl-connector {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-shrink: 0;
 }
 
-.cand-tl-dot {
+.tl-dot {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--color-surface-2);
-  border: 2px solid var(--color-border);
-  color: var(--color-text-secondary);
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
-  flex-shrink: 0;
-  transition: all 0.3s;
+  color: #94a3b8;
 }
 
-.cand-tl-node.done .cand-tl-dot {
-  background: #10b981;
-  border-color: #10b981;
-  color: white;
+.tl-node.done .tl-dot {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #16a34a;
 }
 
-.cand-tl-node.active .cand-tl-dot {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: white;
-  box-shadow: 0 0 12px rgba(99,102,241,0.4);
+.tl-node.current .tl-dot {
+  background: #eef2ff;
+  border-color: #6366f1;
+  color: #6366f1;
 }
 
-.cand-tl-line {
+.tl-line {
   width: 2px;
   flex: 1;
-  min-height: 28px;
-  background: var(--color-border);
-  margin: 4px 0;
+  background: #e2e8f0;
+  margin-top: 6px;
 }
 
-.cand-tl-node.done .cand-tl-line {
-  background: #10b981;
-}
-
-.cand-tl-text {
-  padding-bottom: 24px;
-  padding-top: 6px;
-}
-
-.cand-tl-text strong {
+.tl-content strong {
+  font-size: 14px;
+  color: #0f172a;
   display: block;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
-.cand-tl-text span {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-}
-
-/* ==========================================================================
-   TABLEAU RECRUTEUR
-   ========================================================================== */
-.cand-table-wrap {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.cand-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.cand-table th {
-  background: var(--color-surface-2);
-  color: var(--color-text-secondary);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--color-border);
-  text-align: left;
-}
-
-.cand-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--color-border);
-  vertical-align: middle;
-}
-
-.cand-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.cand-table tbody tr:hover {
-  background: rgba(255,255,255,0.02);
-}
-
-.cand-identity {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.cand-avatar {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #6366f1, #818cf8);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.cand-identity strong {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.cand-identity small {
+.tl-content p {
   font-size: 12px;
-  color: var(--color-text-secondary);
+  color: #64748b;
 }
 
-.cand-badge {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 20px;
-  display: inline-block;
-}
+/* =========================
+   FORMULAIRE
+========================= */
 
-.cand-btn-eval {
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: 7px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.cand-btn-eval:hover {
-  background: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-}
-
-/* ==========================================================================
-   VUE DÉTAIL RECRUTEUR
-   ========================================================================== */
-.cand-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  color: var(--color-primary);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 24px;
-}
-
-.cand-detail-split {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 20px;
-  align-items: start;
-}
-
-.cand-resume-panel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
+.bundle-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
   padding: 28px;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
-.cand-resume-top {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.cand-big-avatar {
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, #6366f1, #818cf8);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: 800;
-  color: white;
-  flex-shrink: 0;
-}
-
-.cand-resume-top h2 { margin: 0 0 4px 0; font-size: 18px; }
-.cand-resume-top p  { margin: 0; font-size: 13px; color: var(--color-text-secondary); }
-
-.cand-resume-section {
-  margin-bottom: 20px;
-}
-
-.cand-resume-section h4 {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: var(--color-text-secondary);
-  margin: 0 0 8px 0;
-}
-
-.cand-resume-section p {
-  font-size: 14px;
-  color: var(--color-text);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  line-height: 1.6;
-}
-
-.cand-skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.cand-skill-tag {
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.cand-cv-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px;
-  background: var(--color-text);
-  color: var(--color-surface);
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  margin-top: 8px;
-  transition: opacity 0.2s;
-  box-sizing: border-box;
-}
-
-.cand-cv-btn:hover { opacity: 0.85; }
-
-.cand-action-panel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.cand-action-panel h3 {
-  font-size: 16px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.cand-action-panel p {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  margin: 0;
-}
-
-.cand-action-panel label {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.cand-select {
-  width: 100%;
-  padding: 11px 14px;
-  border-radius: 9px;
-  background: var(--color-surface-2);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  outline: none;
-}
-
-.cand-select:focus { border-color: var(--color-primary); }
-.cand-select option { background: var(--color-surface); color: var(--color-text); }
-
-.cand-btn-save {
-  width: 100%;
-  padding: 12px;
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 9px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.cand-btn-save:hover { opacity: 0.88; }
-
-.cand-btn-interview {
-  width: 100%;
-  padding: 12px;
-  background: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: 9px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: border-color 0.2s, color 0.2s;
-}
-
-.cand-btn-interview:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-/* ==========================================================================
-   FORMULAIRE CANDIDATURE
-   ========================================================================== */
-.cand-form-page {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-  background: var(--color-background);
-}
-
-.cand-form-card {
-  width: 100%;
-  max-width: 600px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  padding: 40px;
-}
-
-.cand-form-card h2 {
-  font-size: 22px;
-  font-weight: 800;
-  margin: 0 0 6px 0;
-}
-
-.cand-form-card p {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  margin: 0 0 28px 0;
-}
-
-.cand-form {
+.bundle-form {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.cand-form-row {
-  display: flex;
-  gap: 12px;
-}
-
-.cand-form input,
-.cand-form textarea {
-  width: 100%;
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  padding: 12px 16px;
-  color: var(--color-text);
-  font-size: 14px;
-  font-family: inherit;
+.bundle-form input,
+.bundle-form textarea {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #0f172a;
   outline: none;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+  transition: 0.2s;
 }
 
-.cand-form input:focus,
-.cand-form textarea:focus {
-  border-color: var(--color-primary);
+.bundle-form input:focus,
+.bundle-form textarea:focus {
+  border-color: #6366f1;
+  background: white;
 }
 
-.cand-form textarea {
-  resize: none;
-  min-height: 110px;
-}
-
-.cand-upload {
-  background: var(--color-surface-2);
-  border: 2px dashed var(--color-border);
-  border-radius: 10px;
-  padding: 24px;
-  cursor: pointer;
+.bundle-upload {
+  border: 1px dashed #6366f1;
+  padding: 18px;
   text-align: center;
-  color: var(--color-text-secondary);
-  transition: border-color 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-}
-
-.cand-upload:hover { border-color: var(--color-primary); color: var(--color-text); }
-.cand-upload input { display: none; }
-
-.cand-form-submit {
-  background: linear-gradient(135deg, #6366f1, #818cf8);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 13px;
-  font-size: 15px;
-  font-weight: 700;
+  border-radius: 12px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  color: #6366f1;
+  background: #eef2ff;
 }
 
-.cand-form-submit:hover {
-  opacity: 0.88;
-  transform: translateY(-1px);
+.btn-submit {
+  background: linear-gradient(135deg, #6366f1, #60a5fa);
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.cand-toast {
-  background: rgba(16,185,129,0.1);
-  border: 1px solid rgba(16,185,129,0.3);
-  color: #10b981;
-  padding: 12px 16px;
-  border-radius: 10px;
+.btn-submit:hover {
+  transform: translateY(-2px);
+}
+
+.toast-success {
+  margin-top: 12px;
+  color: #16a34a;
+  font-size: 13px;
   display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-@media (max-width: 900px) {
-  .cand-layout { grid-template-columns: 1fr; }
-  .cand-detail-split { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 600px) {
-  .cand-form-row { flex-direction: column; }
-  .cand-form-card { padding: 24px; }
-  .cand-header { flex-direction: column; gap: 12px; }
 }

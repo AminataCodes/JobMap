@@ -44,7 +44,7 @@ function Home() {
 
       {/* ================= MARQUEE ================= */}
       <section className="home-trust-logos">
-        <p className="trust-label">Les leaders de l'industrie recrutent nos profils</p>
+        <p className="trust-label"></p>
         <MarqueeBg />
       </section>
 
