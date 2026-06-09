@@ -18,6 +18,50 @@ function MapLogo({ size = 90 }) {
   );
 }
 
+const HOW_STEPS = [
+  {
+    step: "ÉTAPE 01",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="4" width="18" height="24" rx="3" stroke="currentColor" strokeWidth="2"/>
+        <path d="M8 10h8M8 15h6M8 20h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <circle cx="24" cy="24" r="5" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2"/>
+        <path d="M22 24l1.5 1.5L26 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    title: "Clique sur l'extension",
+    description:
+      "Lorsque tu consultes une offre et que tu cliques pour postuler ou interagir avec une annonce, l'extension détecte automatiquement la candidature et l'ajoute à ton espace JobMap.",
+  },
+  {
+    step: "ÉTAPE 02",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="11" r="6" stroke="currentColor" strokeWidth="2"/>
+        <path d="M5 28c0-6.075 4.925-11 11-11s11 4.925 11 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M20 9l2 2-2 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    title: "Crée ton compte",
+    description:
+      "Inscris-toi avec ton email en quelques secondes. L'extension reconnaît ton compte et sait exactement où centraliser toutes tes candidatures.",
+  },
+  {
+    step: "ÉTAPE 03",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="6" width="24" height="20" rx="3" stroke="currentColor" strokeWidth="2"/>
+        <path d="M4 12h24" stroke="currentColor" strokeWidth="2"/>
+        <path d="M10 18h5M10 22h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <circle cx="22" cy="20" r="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+    title: "Suis tes candidatures",
+    description:
+      "Toutes tes candidatures s'affichent sur ton dashboard : nom du poste, entreprise et date de dépôt. Tout au même endroit, peu importe la plateforme.",
+  },
+];
+
 function Home() {
   const navigate = useNavigate();
 
@@ -47,6 +91,48 @@ function Home() {
         <p className="trust-label"></p>
         <MarqueeBg />
       </section>
+
+      {/* ================= HOW IT WORKS ================= */}
+      <section className="home-how">
+        <div className="how-header">
+          <h2>Comment ça marche ?</h2>
+          <p className="how-subtitle">Trois étapes pour ne plus jamais perdre le fil de tes candidatures.</p>
+        </div>
+
+        <div className="how-steps">
+          {HOW_STEPS.map((item, i) => (
+            <div className="how-card" key={i} style={{ animationDelay: `${i * 0.12}s` }}>
+              <div className="how-card-icon">{item.icon}</div>
+              <span className="how-card-step">{item.step}</span>
+              <h3 className="how-card-title">{item.title}</h3>
+              <p className="how-card-desc">{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="how-cta">
+          <button className="how-cta-btn" onClick={() => navigate("/register")}>
+            Commencer maintenant
+          </button>
+        </div>
+      </section>
+
+      {/* ================= FOOTER ================= */}
+      <footer className="home-footer">
+        <div className="footer-inner">
+          <div className="footer-brand">
+            <MapLogo size={28} />
+            <span className="footer-brand-name">JobMap</span>
+          </div>
+          <p className="footer-tagline">Centralise toutes tes candidatures, en un seul endroit.</p>
+          <div className="footer-links">
+            <button onClick={() => navigate("/register")} className="footer-link">Créer un compte</button>
+            <span className="footer-dot">·</span>
+            <button onClick={() => navigate("/login")} className="footer-link">Se connecter</button>
+          </div>
+          <p className="footer-copy">© {new Date().getFullYear()} JobMap </p>
+        </div>
+      </footer>
 
     </div>
   );
