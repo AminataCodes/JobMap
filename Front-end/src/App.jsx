@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
+import ProfilEcolePage from "./pages/ProfilEcolePage";
 
 import ProfilPage from "./pages/ProfilPage"
 import Messagerie from "./pages/Messagerie"
@@ -62,6 +63,7 @@ function App() {
               <Route path="/calendrier" element={<Calendrier />} />
               <Route path="/entretiens" element={<AppointementPage />} />
               <Route path="/calendar/:id" element={<AppointementPage />} />
+              <Route path="/profil-ecole" element={<ProfilEcolePage />} />
 
             </Routes>
           </main>

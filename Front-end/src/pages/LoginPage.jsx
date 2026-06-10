@@ -2,36 +2,67 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useAuth } from "../context/AuthContext";
-import { loginEtudiant } from "../services/api";
+import { loginEtudiant, loginEcole } from "../services/api";
 import "../styles/auth.css";
 
 function LoginPage() {
+  const [onglet, setOnglet] = useState("etudiant");
+
+  // Étudiant
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
+
+  // École
+  const [emailEcole, setEmailEcole] = useState("");
+  const [motDePasseEcole, setMotDePasseEcole] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  // ── Submit Étudiant ──
+  const handleSubmitEtudiant = async (e) => {
     e.preventDefault();
     setError("");
-
     if (!email || !motDePasse) {
       setError("Veuillez remplir tous les champs");
       return;
     }
-
     setLoading(true);
-
     try {
       const data = await loginEtudiant(email, motDePasse);
-
       login(data.user, data.token);
       navigate("/profil");
-    } catch (err) {
+    } catch {
       setError("Email ou mot de passe incorrect");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ── Submit École ──
+  const handleSubmitEcole = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!emailEcole || !motDePasseEcole) {
+      setError("Veuillez remplir tous les champs");
+      return;
+    }
+    setLoading(true);
+    try {
+      const data = await loginEcole({ emailPro: emailEcole, password: motDePasseEcole });
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", "ecole");
+        localStorage.setItem("ecole", JSON.stringify(data.ecole));
+        navigate("/profil-ecole");
+      } else {
+        setError(data.message || "Identifiants incorrects");
+      }
+    } catch {
+      setError("Erreur serveur");
     } finally {
       setLoading(false);
     }
@@ -39,8 +70,10 @@ function LoginPage() {
 
   return (
     <div className="auth-page">
+
       {/* ================= LEFT ================= */}
       <div className="auth-card">
+
         <a href="#" className="auth-logo">
           <svg viewBox="0 0 32 32" fill="none">
             <rect width="32" height="32" rx="8" fill="#2563EB" />
@@ -53,40 +86,93 @@ function LoginPage() {
         <h1>Se connecter</h1>
         <p className="subtitle">Bienvenue sur JobMap</p>
 
-        {error && <p style={{ color: "#EF4444" }}>{error}</p>}
-
-        <form onSubmit={handleSubmit}>
-          <InputField
-            label="Adresse e-mail"
-            type="email"
-            placeholder="exemple@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <InputField
-            label="Mot de passe"
-            type="password"
-            placeholder="••••••••••"
-            value={motDePasse}
-            onChange={(e) => setMotDePasse(e.target.value)}
-          />
-
-          <Link to="/forgot-password" className="forgot-link">
-            Mot de passe oublié ?
-          </Link>
-
-          <button className="primary-btn" type="submit" disabled={loading}>
-            {loading ? "Connexion..." : "Se connecter"}
+        {/* ── Onglets ── */}
+        <div className="tabs">
+          <button
+            type="button"
+            className={onglet === "etudiant" ? "active" : ""}
+            onClick={() => { setOnglet("etudiant"); setError(""); }}
+          >
+            🎓 Étudiant
           </button>
-        </form>
+          <button
+            type="button"
+            className={onglet === "ecole" ? "active" : ""}
+            onClick={() => { setOnglet("ecole"); setError(""); }}
+          >
+            🏫 École
+          </button>
+        </div>
+
+        {error && (
+          <p style={{ color: "#EF4444", marginBottom: "12px", fontSize: "14px" }}>
+            {error}
+          </p>
+        )}
+
+        {/* ── Formulaire Étudiant ── */}
+        {onglet === "etudiant" && (
+          <form onSubmit={handleSubmitEtudiant}>
+            <InputField
+              label="Adresse e-mail"
+              type="email"
+              icon="mail"
+              placeholder="exemple@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <InputField
+              label="Mot de passe"
+              type="password"
+              icon="lock"
+              placeholder="••••••••••"
+              value={motDePasse}
+              onChange={(e) => setMotDePasse(e.target.value)}
+            />
+            <Link to="/forgot-password" className="forgot-link">
+              Mot de passe oublié ?
+            </Link>
+            <button className="primary-btn" type="submit" disabled={loading}>
+              {loading ? "Connexion..." : "Se connecter"}
+            </button>
+          </form>
+        )}
+
+        {/* ── Formulaire École ── */}
+        {onglet === "ecole" && (
+          <form onSubmit={handleSubmitEcole}>
+            <InputField
+              label="Email professionnel"
+              type="email"
+              icon="mail"
+              placeholder="contact@ecole.fr"
+              value={emailEcole}
+              onChange={(e) => setEmailEcole(e.target.value)}
+            />
+            <InputField
+              label="Mot de passe"
+              type="password"
+              icon="lock"
+              placeholder="••••••••••"
+              value={motDePasseEcole}
+              onChange={(e) => setMotDePasseEcole(e.target.value)}
+            />
+            <Link to="/forgot-password" className="forgot-link">
+              Mot de passe oublié ?
+            </Link>
+            <button className="primary-btn" type="submit" disabled={loading}>
+              {loading ? "Connexion..." : "Se connecter"}
+            </button>
+          </form>
+        )}
 
         <p className="bottom-text">
           Pas de compte ? <Link to="/register">S'inscrire</Link>
         </p>
+
       </div>
 
-      {/* ================= RIGHT (DÉCO RESTAURÉE) ================= */}
+      {/* ================= RIGHT ================= */}
       <div className="auth-panel">
         <div className="auth-panel-illustration">
           <svg viewBox="0 0 500 350" fill="none">
@@ -98,12 +184,12 @@ function LoginPage() {
             <rect x="210" y="160" width="80" height="100" rx="20" fill="#3B82F6" />
           </svg>
         </div>
-
         <div className="auth-panel-text">
           <h2>Construis ton avenir</h2>
           <p>et ne perds pas tes opportunités</p>
         </div>
       </div>
+
     </div>
   );
 }
