@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: jobmap_db
+    restart: always
+    environment:
+      POSTGRES_USER: jobmap
+      POSTGRES_PASSWORD: jobmap
+      POSTGRES_DB: jobmap
+    ports:
+      - "5432:5432"
