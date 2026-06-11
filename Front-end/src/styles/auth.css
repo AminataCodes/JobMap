@@ -445,3 +445,23 @@ body.dark, [data-theme='dark'] {
     border-right: none;
   }
 }
+
+/* Label de section dans le formulaire école */
+.form-section-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+  margin-top: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Indication optionnel */
+.optional-label {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
