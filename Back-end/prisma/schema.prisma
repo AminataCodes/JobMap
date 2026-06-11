@@ -9,68 +9,70 @@ datasource db {
 model Etudiant {
   uid            String         @id @default(uuid())
   email          String         @unique
-  motDePasse     String
   nom            String
   prenom         String
+  motDePasse     String
+
+  niveauEtude    String?
+  cvUrl          String?
+  bio            String?
+  competences    String[]
+
   emailVerified  Boolean        @default(false)
   verifyToken    String?
-  emailConnecte  Boolean        @default(false)
-  providerMail   MailProvider?
+
   candidatures   Candidature[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
 }
 
-model Candidature {
-  id            String   @id @default(uuid())
-  nomPoste      String
-  nomEntreprise String
-  plateforme    String?
-  dateDepot     DateTime
-  sourceUrl     String?
-  etudiantId    String
-  etudiant      Etudiant @relation(fields: [etudiantId], references: [uid])
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
+model Admin {
+  uid             String         @id @default(uuid())
+  email           String         @unique
+  nomAdmin        String
+  description     String?
+  photoProfilUrl  String?
 
-model Ecole {
-  id                String      @id @default(uuid())
-  nomEtablissement  String
-  typeEtablissement String
-  logo              String?
-  siteWeb           String?
-  emailPro          String      @unique
-  telephone         String
-  adresse           String
-  ville             String
-  codePostal        String
-  pays              String
-  description       String
-  password          String
-  formations        Formation[]
-  offres            Offre[]
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-}
+  motDePasse      String
 
-model Formation {
-  id      String @id @default(uuid())
-  nom     String
-  ecoleId String
-  ecole   Ecole  @relation(fields: [ecoleId], references: [id], onDelete: Cascade)
+  emailVerified   Boolean        @default(false)
+  verifyToken     String?
+
+  offres          Offre[]
 }
 
 model Offre {
-  id          String   @id @default(uuid())
-  titre       String
-  description String?
-  ecoleId     String
-  ecole       Ecole    @relation(fields: [ecoleId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
+  id                       String         @id @default(uuid())
+
+  adminId                  String
+
+  nomEntreprise            String
+  nomPoste                 String
+
+  datePublication          DateTime       @default(now())
+
+  description              String
+  lieu                     String
+
+  competencesObligatoires  String?
+  competencesSouhaitables  String?
+
+  dateDeDebut              DateTime?
+
+  admin                    Admin          @relation(fields: [adminId], references: [uid])
+
+  candidatures             Candidature[]
 }
 
-enum MailProvider {
-  GMAIL
-  OUTLOOK
+model Candidature {
+  id                   String      @id @default(uuid())
+
+  offreId              String
+  etudiantId           String
+
+  lettreMotivationUrl  String
+  messageAdditionnel   String?
+
+  createdAt            DateTime    @default(now())
+
+  offre                Offre       @relation(fields: [offreId], references: [id])
+  etudiant             Etudiant    @relation(fields: [etudiantId], references: [uid])
 }
