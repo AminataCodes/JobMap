@@ -14,6 +14,11 @@ import Messagerie from "./pages/Messagerie"
 import Calendrier from "./pages/Calendrier"
 import AppointementPage from "./pages/AppointementPage"
 
+import PublierOffre from "./pages/PublierOffre"
+import Offres from "./pages/Offres"
+
+
+
 /* =========================
    CANDIDATURE (STUDENT ONLY)
 ========================= */
@@ -62,9 +67,14 @@ function App() {
               <Route path="/calendrier" element={<Calendrier />} />
               <Route path="/entretiens" element={<AppointementPage />} />
               <Route path="/calendar/:id" element={<AppointementPage />} />
+              <Route path="/offres" element={<Offres />} />
+              <Route path="/publier-offre" element={<PublierOffre />} />
+              <Route path="/offres" element={<Offres />} />
+              <Route path="/publier-offre" element={<PublierOffre />} />
 
             </Routes>
           </main>
+          
 
         </div>
       </ThemeProvider>
