@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  getProfilEcole,
+  getProfilAdmin,
   ajouterFormation,
   supprimerFormation,
   ajouterOffre,
@@ -14,7 +14,7 @@ function ProfilEcolePage() {
   const token = localStorage.getItem("token");
   const role  = localStorage.getItem("role");
 
-  const [ecole, setEcole] = useState(null);
+  const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [onglet, setOnglet] = useState("apropos");
 
@@ -23,7 +23,7 @@ function ProfilEcolePage() {
 
   useEffect(() => {
     // Redirige si pas de token ou pas le bon rôle
-    if (!token || role !== "ecole") {
+    if (!token || role !== "admin") {
       navigate("/login");
       return;
     }
@@ -32,13 +32,13 @@ function ProfilEcolePage() {
 
   const fetchProfil = async () => {
     try {
-      const data = await getProfilEcole(token);
+      const data = await getProfilAdmin(token);
       // Redirige seulement si token invalide (401)
       if (data.message === "Token manquant" || data.message === "Token invalide ou expiré") {
         navigate("/login");
         return;
       }
-      setEcole(data);
+      setAdmin(data);
     } catch {
       navigate("/login");
     } finally {
@@ -73,66 +73,45 @@ function ProfilEcolePage() {
   };
 
   if (loading) return <div className="pe-loading">Chargement...</div>;
-  if (!ecole)  return <div className="pe-loading">Profil introuvable.</div>;
+  if (!admin)  return <div className="pe-loading">Profil introuvable.</div>;
 
   return (
     <div className="pe-page">
 
       {/* ── En-tête ── */}
       <div className="pe-header-card">
-        <div className="pe-logo-box">
-          {ecole.logo
-            ? <img src={ecole.logo} alt="Logo" />
-            : <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-              </svg>
-          }
-        </div>
-        <div className="pe-header-info">
-          <h1 className="pe-school-name">{ecole.nomEtablissement}</h1>
-          <span className="pe-school-type">{ecole.typeEtablissement}</span>
-          <div className="pe-header-meta">
-            <span className="pe-meta-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-              {ecole.ville}, {ecole.pays}
-            </span>
-            {ecole.siteWeb && (
-              <a href={ecole.siteWeb} target="_blank" rel="noreferrer" className="pe-meta-item pe-meta-link">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                </svg>
-                {ecole.siteWeb.replace(/^https?:\/\//, "")}
-              </a>
-            )}
-            <span className="pe-meta-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-              {ecole.emailPro}
-            </span>
-          </div>
-        </div>
+       <div className="pe-logo-box">
+  {admin.photoProfilUrl ? (
+    <img src={admin.photoProfilUrl} alt="Profil" />
+  ) : (
+    <div className="pe-default-avatar">
+      {admin.nomAdmin?.charAt(0)}
+    </div>
+  )}
+</div>
+
+<div className="pe-header-info">
+  <h1>{admin.nomAdmin}</h1>
+  <p>{admin.email}</p>
+</div>
       </div>
 
       {/* ── Stats ── */}
       <div className="pe-stats-row">
+              <div className="pe-stat-card">
+        <span className="pe-stat-num">
+          {admin.offres?.length ?? 0}
+        </span>
+        <span className="pe-stat-lbl">
+          Offres publiées
+        </span>
+      </div>
         <div className="pe-stat-card">
-          <span className="pe-stat-num">{ecole.offres?.length ?? 0}</span>
-          <span className="pe-stat-lbl">Offres publiées</span>
-        </div>
-        <div className="pe-stat-card">
-          <span className="pe-stat-num">{ecole.formations?.length ?? 0}</span>
+          <span className="pe-stat-num">{admin  .formations?.length ?? 0}</span>
           <span className="pe-stat-lbl">Formations</span>
         </div>
         <div className="pe-stat-card">
-          <span className="pe-stat-num">{new Date(ecole.createdAt).getFullYear()}</span>
+          <span className="pe-stat-num">{new Date(admin.createdAt).getFullYear()}</span>
           <span className="pe-stat-lbl">Membre depuis</span>
         </div>
       </div>
@@ -159,7 +138,7 @@ function ProfilEcolePage() {
       {onglet === "apropos" && (
         <div className="pe-section-card">
           <h2 className="pe-section-title">À propos</h2>
-          <p className="pe-about-text">{ecole.description}</p>
+          <p className="pe-about-text">{admin.description}</p>
         </div>
       )}
 
@@ -168,12 +147,12 @@ function ProfilEcolePage() {
         <div className="pe-section-card">
           <h2 className="pe-section-title">Formations</h2>
 
-          {ecole.formations?.length === 0 && (
+          {admin.formations?.length === 0 && (
             <p className="pe-empty">Aucune formation ajoutée.</p>
           )}
 
           <ul className="pe-formation-list">
-            {ecole.formations?.map(f => (
+            {admin.formations?.map(f => (
               <li key={f.id} className="pe-formation-item">
                 <span>{f.nom}</span>
                 <button
@@ -207,12 +186,12 @@ function ProfilEcolePage() {
         <div className="pe-section-card">
           <h2 className="pe-section-title">Offres publiées</h2>
 
-          {ecole.offres?.length === 0 && (
+          {admin.offres?.length === 0 && (
             <p className="pe-empty">Aucune offre publiée.</p>
           )}
 
           <div className="pe-offres-grid">
-            {ecole.offres?.map(o => (
+            {admin.offres?.map(o => (
               <div key={o.id} className="pe-offre-card">
                 <div className="pe-offre-top">
                   <div>
@@ -267,12 +246,12 @@ function ProfilEcolePage() {
           <h2 className="pe-section-title">Informations</h2>
           <div className="pe-info-grid">
             {[
-              { label: "Adresse",     value: ecole.adresse    },
-              { label: "Ville",       value: ecole.ville      },
-              { label: "Code postal", value: ecole.codePostal },
-              { label: "Pays",        value: ecole.pays       },
-              { label: "Email",       value: ecole.emailPro   },
-              { label: "Téléphone",   value: ecole.telephone  },
+              { label: "Adresse",     value: admin.adresse    },
+              { label: "Ville",       value: admin.ville      },
+              { label: "Code postal", value: admin.codePostal },
+              { label: "Pays",        value: admin.pays       },
+              { label: "Email",       value: admin.emailPro   },
+              { label: "Téléphone",   value: admin.telephone  },
             ].map(r => (
               <div key={r.label} className="pe-info-row">
                 <span className="pe-info-label">{r.label}</span>

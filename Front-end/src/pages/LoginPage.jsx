@@ -2,19 +2,17 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useAuth } from "../context/AuthContext";
-import { loginEtudiant, loginEcole } from "../services/api";
+import { loginEtudiant, loginAdmin } from "../services/api";
 import "../styles/auth.css";
 
 function LoginPage() {
   const [onglet, setOnglet] = useState("etudiant");
 
-  // Étudiant
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
 
-  // École
-  const [emailEcole, setEmailEcole] = useState("");
-  const [motDePasseEcole, setMotDePasseEcole] = useState("");
+  const [emailAdmin, setEmailAdmin] = useState("");
+  const [motDePasseAdmin, setMotDePasseAdmin] = useState("");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,7 +20,6 @@ function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // ── Submit Étudiant ──
   const handleSubmitEtudiant = async (e) => {
     e.preventDefault();
     setError("");
@@ -33,7 +30,7 @@ function LoginPage() {
     setLoading(true);
     try {
       const data = await loginEtudiant(email, motDePasse);
-      login(data.user, data.token);
+      login(data.user, data.token, 'etudiant');
       navigate("/profil");
     } catch {
       setError("Email ou mot de passe incorrect");
@@ -42,22 +39,19 @@ function LoginPage() {
     }
   };
 
-  // ── Submit École ──
-  const handleSubmitEcole = async (e) => {
+  const handleSubmitAdmin = async (e) => {
     e.preventDefault();
     setError("");
-    if (!emailEcole || !motDePasseEcole) {
+    if (!emailAdmin || !motDePasseAdmin) {
       setError("Veuillez remplir tous les champs");
       return;
     }
     setLoading(true);
     try {
-      const data = await loginEcole({ emailPro: emailEcole, password: motDePasseEcole });
+      const data = await loginAdmin({ email: emailAdmin, motDePasse: motDePasseAdmin });
       if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", "ecole");
-        localStorage.setItem("ecole", JSON.stringify(data.ecole));
-        navigate("/profil-ecole");
+        login(data.admin, data.token, 'admin');
+        navigate("/profil-admin");
       } else {
         setError(data.message || "Identifiants incorrects");
       }
@@ -70,8 +64,6 @@ function LoginPage() {
 
   return (
     <div className="auth-page">
-
-      {/* ================= LEFT ================= */}
       <div className="auth-card">
 
         <a href="#" className="auth-logo">
@@ -86,7 +78,6 @@ function LoginPage() {
         <h1>Se connecter</h1>
         <p className="subtitle">Bienvenue sur JobMap</p>
 
-        {/* ── Onglets ── */}
         <div className="tabs">
           <button
             type="button"
@@ -97,10 +88,10 @@ function LoginPage() {
           </button>
           <button
             type="button"
-            className={onglet === "ecole" ? "active" : ""}
-            onClick={() => { setOnglet("ecole"); setError(""); }}
+            className={onglet === "admin" ? "active" : ""}
+            onClick={() => { setOnglet("admin"); setError(""); }}
           >
-            🏫 École
+            🏢 Admin
           </button>
         </div>
 
@@ -110,7 +101,6 @@ function LoginPage() {
           </p>
         )}
 
-        {/* ── Formulaire Étudiant ── */}
         {onglet === "etudiant" && (
           <form onSubmit={handleSubmitEtudiant}>
             <InputField
@@ -138,24 +128,23 @@ function LoginPage() {
           </form>
         )}
 
-        {/* ── Formulaire École ── */}
-        {onglet === "ecole" && (
-          <form onSubmit={handleSubmitEcole}>
+        {onglet === "admin" && (
+          <form onSubmit={handleSubmitAdmin}>
             <InputField
-              label="Email professionnel"
+              label="Adresse e-mail"
               type="email"
               icon="mail"
-              placeholder="contact@ecole.fr"
-              value={emailEcole}
-              onChange={(e) => setEmailEcole(e.target.value)}
+              placeholder="admin@jobmap.com"
+              value={emailAdmin}
+              onChange={(e) => setEmailAdmin(e.target.value)}
             />
             <InputField
               label="Mot de passe"
               type="password"
               icon="lock"
               placeholder="••••••••••"
-              value={motDePasseEcole}
-              onChange={(e) => setMotDePasseEcole(e.target.value)}
+              value={motDePasseAdmin}
+              onChange={(e) => setMotDePasseAdmin(e.target.value)}
             />
             <Link to="/forgot-password" className="forgot-link">
               Mot de passe oublié ?
@@ -172,7 +161,6 @@ function LoginPage() {
 
       </div>
 
-      {/* ================= RIGHT ================= */}
       <div className="auth-panel">
         <div className="auth-panel-illustration">
           <svg viewBox="0 0 500 350" fill="none">

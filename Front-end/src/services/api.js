@@ -102,11 +102,11 @@ export function registerEntreprise(formData) {
 }
 
 // ──────────────────────────────────────────────
-//  AUTH ÉCOLE
+//  AUTH ADMIN
 // ──────────────────────────────────────────────
 
-export const registerEcole = async (data) => {
-  const res = await fetch(`${BASE}/auth/ecole/register`, {
+export const registerAdmin = async (data) => {
+  const res = await fetch(`${BASE}/auth/admin/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -114,8 +114,8 @@ export const registerEcole = async (data) => {
   return res.json()
 }
 
-export const loginEcole = async (data) => {
-  const res = await fetch(`${BASE}/auth/ecole/login`, {
+export const loginAdmin = async (data) => {
+  const res = await fetch(`${BASE}/auth/admin/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -123,15 +123,15 @@ export const loginEcole = async (data) => {
   return res.json()
 }
 
-export const getProfilEcole = async (token) => {
-  const res = await fetch(`${BASE}/auth/ecole/profil`, {
+export const getProfilAdmin = async (token) => {
+  const res = await fetch(`${BASE}/auth/admin/profil`, {
     headers: { Authorization: `Bearer ${token}` },
   })
   return res.json()
 }
 
 export const ajouterFormation = async (token, nom) => {
-  const res = await fetch(`${BASE}/auth/ecole/formations`, {
+  const res = await fetch(`${BASE}/auth/admin/formations`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ export const ajouterFormation = async (token, nom) => {
 }
 
 export const supprimerFormation = async (token, id) => {
-  const res = await fetch(`${BASE}/auth/ecole/formations/${id}`, {
+  const res = await fetch(`${BASE}/auth/admin/formations/${id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   })
@@ -151,7 +151,7 @@ export const supprimerFormation = async (token, id) => {
 }
 
 export const ajouterOffre = async (token, titre, description) => {
-  const res = await fetch(`${BASE}/auth/ecole/offres`, {
+  const res = await fetch(`${BASE}/auth/admin/offres`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ export const ajouterOffre = async (token, titre, description) => {
 }
 
 export const supprimerOffre = async (token, id) => {
-  const res = await fetch(`${BASE}/auth/ecole/offres/${id}`, {
+  const res = await fetch(`${BASE}/auth/admin/offres/${id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   })

@@ -17,7 +17,15 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (!token) return
 
-    fetch('/api/auth/etudiant/profil', {
+    const role = localStorage.getItem('role')
+
+    // ← choisit la bonne route selon le rôle
+    const profilUrl =
+      role === 'admin'
+        ? '/api/auth/admin/profil'
+        : '/api/auth/etudiant/profil'
+
+    fetch(profilUrl, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {
@@ -25,19 +33,21 @@ export function AuthProvider({ children }) {
         return res.json()
       })
       .then(data => {
-        const updatedUser = { ...data, role: 'etudiant' }
+        const updatedUser = { ...data, role }
         localStorage.setItem('user', JSON.stringify(updatedUser))
         setUser(updatedUser)
       })
       .catch(() => {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
+        localStorage.removeItem('role')
         setUser(null)
       })
   }, [token])
 
-  const login = (userData, token) => {
+  const login = (userData, token, role) => {
     localStorage.setItem('token', token)
+    localStorage.setItem('role', role)
     localStorage.setItem('user', JSON.stringify(userData))
     setUser(userData)
   }
@@ -45,15 +55,17 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    localStorage.removeItem('role')
     setUser(null)
-    window.location.href = '/register'
+    window.location.href = '/login'
   }
 
   const isEtudiant = user?.role === 'etudiant'
+  const isAdmin = user?.role === 'admin'
   const isAuthenticated = !!user && !!localStorage.getItem('token')
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout, isEtudiant, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, isEtudiant, isAdmin, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )

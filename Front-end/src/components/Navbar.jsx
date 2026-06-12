@@ -33,6 +33,14 @@ function Navbar() {
     navigate("/login");
   };
 
+  const handleProfilClick = () => {
+    if (user?.role === "admin") {
+      navigate("/profil-admin");
+    } else {
+      navigate("/profil");
+    }
+  };
+
   const isActive = (path) =>
     location.pathname === path ? "nav-item active" : "nav-item";
 
@@ -82,9 +90,9 @@ function Navbar() {
 
         {isAuthenticated ? (
           <div className="nav-user">
-            <div className="nav-profile-pill" onClick={() => navigate("/profil")}>
+            <div className="nav-profile-pill" onClick={handleProfilClick}>
               <div className="nav-avatar"><FiUser size={14} /></div>
-              <span className="nav-username">{user?.nom}</span>
+              <span className="nav-username">{user?.nom || user?.nomAdmin}</span>
             </div>
             <button className="nav-icon-btn logout-btn" onClick={handleLogout} title="Se déconnecter">
               <FiLogOut size={16} />
