@@ -12,15 +12,12 @@ model Etudiant {
   nom            String
   prenom         String
   motDePasse     String
-
   niveauEtude    String?
   cvUrl          String?
   bio            String?
   competences    String[]
-
   emailVerified  Boolean        @default(false)
   verifyToken    String?
-
   candidatures   Candidature[]
 }
 
@@ -30,49 +27,34 @@ model Admin {
   nomAdmin        String
   description     String?
   photoProfilUrl  String?
-
   motDePasse      String
-
   emailVerified   Boolean        @default(false)
   verifyToken     String?
-
   offres          Offre[]
 }
 
 model Offre {
   id                       String         @id @default(uuid())
-
   adminId                  String
-
   nomEntreprise            String
   nomPoste                 String
-
   datePublication          DateTime       @default(now())
-
   description              String
   lieu                     String
-
   competencesObligatoires  String?
   competencesSouhaitables  String?
-
   dateDeDebut              DateTime?
-
   admin                    Admin          @relation(fields: [adminId], references: [uid])
-
   candidatures             Candidature[]
 }
 
 model Candidature {
   id                   String      @id @default(uuid())
-
   offreId              String
   etudiantId           String
-
   lettreMotivationUrl  String
   messageAdditionnel   String?
-
   createdAt            DateTime    @default(now())
-
   offre                Offre       @relation(fields: [offreId], references: [id])
   etudiant             Etudiant    @relation(fields: [etudiantId], references: [uid])
 }
