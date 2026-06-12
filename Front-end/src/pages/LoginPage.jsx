@@ -8,11 +8,9 @@ import "../styles/auth.css";
 function LoginPage() {
   const [onglet, setOnglet] = useState("etudiant");
 
-  // Étudiant
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
 
-  // École
   const [emailAdmin, setEmailAdmin] = useState("");
   const [motDePasseAdmin, setMotDePasseAdmin] = useState("");
 
@@ -22,7 +20,6 @@ function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // ── Submit Étudiant ──
   const handleSubmitEtudiant = async (e) => {
     e.preventDefault();
     setError("");
@@ -33,7 +30,7 @@ function LoginPage() {
     setLoading(true);
     try {
       const data = await loginEtudiant(email, motDePasse);
-      login(data.user, data.token);
+      login(data.user, data.token, 'etudiant');
       navigate("/profil");
     } catch {
       setError("Email ou mot de passe incorrect");
@@ -42,49 +39,31 @@ function LoginPage() {
     }
   };
 
-  // ── Submit Admin ──
   const handleSubmitAdmin = async (e) => {
-  e.preventDefault();
-
-  setError("");
-
-  if (!emailAdmin || !motDePasseAdmin) {
-    setError("Veuillez remplir tous les champs");
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    const data = await loginAdmin({
-      email: emailAdmin,
-      motDePasse: motDePasseAdmin,
-    });
-
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", "admin");
-      localStorage.setItem(
-        "admin",
-        JSON.stringify(data.admin)
-      );
-
-      navigate("/profil-admin");
-    } else {
-      setError(data.message || "Identifiants incorrects");
+    e.preventDefault();
+    setError("");
+    if (!emailAdmin || !motDePasseAdmin) {
+      setError("Veuillez remplir tous les champs");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    setError("Erreur serveur");
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    try {
+      const data = await loginAdmin({ email: emailAdmin, motDePasse: motDePasseAdmin });
+      if (data.token) {
+        login(data.admin, data.token, 'admin');
+        navigate("/profil-admin");
+      } else {
+        setError(data.message || "Identifiants incorrects");
+      }
+    } catch {
+      setError("Erreur serveur");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="auth-page">
-
-      {/* ================= LEFT ================= */}
       <div className="auth-card">
 
         <a href="#" className="auth-logo">
@@ -99,7 +78,6 @@ function LoginPage() {
         <h1>Se connecter</h1>
         <p className="subtitle">Bienvenue sur JobMap</p>
 
-        {/* ── Onglets ── */}
         <div className="tabs">
           <button
             type="button"
@@ -109,15 +87,12 @@ function LoginPage() {
             🎓 Étudiant
           </button>
           <button
-          type="button"
-          className={onglet === "admin" ? "active" : ""}
-          onClick={() => {
-            setOnglet("admin");
-            setError("");
-          }}
-        >
-  🏢 Admin
-</button>
+            type="button"
+            className={onglet === "admin" ? "active" : ""}
+            onClick={() => { setOnglet("admin"); setError(""); }}
+          >
+            🏢 Admin
+          </button>
         </div>
 
         {error && (
@@ -126,7 +101,6 @@ function LoginPage() {
           </p>
         )}
 
-        {/* ── Formulaire Étudiant ── */}
         {onglet === "etudiant" && (
           <form onSubmit={handleSubmitEtudiant}>
             <InputField
@@ -154,39 +128,31 @@ function LoginPage() {
           </form>
         )}
 
-        {/* ── Formulaire École ── */}
         {onglet === "admin" && (
           <form onSubmit={handleSubmitAdmin}>
-  <InputField
-    label="Adresse e-mail"
-    type="email"
-    icon="mail"
-    placeholder="admin@jobmap.com"
-    value={emailAdmin}
-    onChange={(e) => setEmailAdmin(e.target.value)}
-  />
-
-  <InputField
-    label="Mot de passe"
-    type="password"
-    icon="lock"
-    placeholder="••••••••••"
-    value={motDePasseAdmin}
-    onChange={(e) => setMotDePasseAdmin(e.target.value)}
-  />
-
-  <Link to="/forgot-password" className="forgot-link">
-    Mot de passe oublié ?
-  </Link>
-
-  <button
-    className="primary-btn"
-    type="submit"
-    disabled={loading}
-  >
-    {loading ? "Connexion..." : "Se connecter"}
-  </button>
-</form>
+            <InputField
+              label="Adresse e-mail"
+              type="email"
+              icon="mail"
+              placeholder="admin@jobmap.com"
+              value={emailAdmin}
+              onChange={(e) => setEmailAdmin(e.target.value)}
+            />
+            <InputField
+              label="Mot de passe"
+              type="password"
+              icon="lock"
+              placeholder="••••••••••"
+              value={motDePasseAdmin}
+              onChange={(e) => setMotDePasseAdmin(e.target.value)}
+            />
+            <Link to="/forgot-password" className="forgot-link">
+              Mot de passe oublié ?
+            </Link>
+            <button className="primary-btn" type="submit" disabled={loading}>
+              {loading ? "Connexion..." : "Se connecter"}
+            </button>
+          </form>
         )}
 
         <p className="bottom-text">
@@ -195,7 +161,6 @@ function LoginPage() {
 
       </div>
 
-      {/* ================= RIGHT ================= */}
       <div className="auth-panel">
         <div className="auth-panel-illustration">
           <svg viewBox="0 0 500 350" fill="none">

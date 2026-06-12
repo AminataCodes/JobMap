@@ -89,7 +89,7 @@ function MiniCalendrier({ rdvs = [] }) {
 }
 
 function ProfilPage() {
-  const { setUser, logout } = useAuth();
+  const { setUser, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const [profile, setProfile]           = useState(INITIAL_PROFILE);
@@ -103,7 +103,16 @@ function ProfilPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileRef = useRef();
 
+  // ── Redirige un admin vers son profil ──
   useEffect(() => {
+    if (user?.role === 'admin') {
+      navigate('/profil-admin', { replace: true });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.role === 'admin') return;
+
     Promise.all([
       getProfilEtudiant(),
       getMesRendezVous().catch(() => [])

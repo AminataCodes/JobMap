@@ -5,49 +5,33 @@ import { registerEtudiant, registerAdmin } from "../services/api"
 import { useAuth } from "../context/AuthContext"
 import "../styles/auth.css"
 
-const TYPES_ETABLISSEMENT = [
-  "Université",
-  "École d'ingénieurs",
-  "École de commerce",
-  "CFA",
-  "Lycée",
-  "Centre de formation",
-  "Autre",
-]
-
 function RegisterPage() {
   const [onglet, setOnglet] = useState("etudiant")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  // ── État Étudiant ──
   const [prenom, setPrenom] = useState("")
   const [nom, setNom] = useState("")
   const [email, setEmail] = useState("")
   const [motDePasse, setMotDePasse] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
 
-  // ── État École ──
   const [adminForm, setAdminForm] = useState({
-  nomAdmin: "",
-  email: "",
-  description: "",
-  photoProfilUrl: "",
-  motDePasse: "",
-  confirmPassword: "",
+    nomAdmin: "",
+    email: "",
+    description: "",
+    photoProfilUrl: "",
+    motDePasse: "",
+    confirmPassword: "",
   })
 
   const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleAdminChange = (e) => {
-  setAdminForm({
-    ...adminForm,
-    [e.target.name]: e.target.value,
-  })
-}
+    setAdminForm({ ...adminForm, [e.target.name]: e.target.value })
+  }
 
-  // ── Submit Étudiant ──
   const handleSubmitEtudiant = async (e) => {
     e.preventDefault()
     setError("")
@@ -62,7 +46,7 @@ function RegisterPage() {
     setLoading(true)
     try {
       const data = await registerEtudiant({ prenom, nom, email, motDePasse })
-      login(data.user, data.token)
+      login(data.user, data.token, 'etudiant')
       navigate("/profil")
     } catch (err) {
       setError(err.message || "Erreur lors de l'inscription")
@@ -71,58 +55,36 @@ function RegisterPage() {
     }
   }
 
-  // ── Submit École ──
   const handleSubmitAdmin = async (e) => {
-  e.preventDefault()
-
-  setError("")
-
-  if (
-    !adminForm.nomAdmin ||
-    !adminForm.email ||
-    !adminForm.motDePasse
-  ) {
-    setError("Veuillez remplir tous les champs obligatoires")
-    return
-  }
-
-  if (
-    adminForm.motDePasse !==
-    adminForm.confirmPassword
-  ) {
-    setError("Les mots de passe ne correspondent pas")
-    return
-  }
-
-  setLoading(true)
-
-  try {
-    const { confirmPassword, ...dataToSend } = adminForm
-
-    const result = await registerAdmin(dataToSend)
-
-    if (result.token) {
-      localStorage.setItem("token", result.token)
-      localStorage.setItem("role", "admin")
-      localStorage.setItem(
-        "admin",
-        JSON.stringify(result.admin)
-      )
-
-      navigate("/profil-admin")
+    e.preventDefault()
+    setError("")
+    if (!adminForm.nomAdmin || !adminForm.email || !adminForm.motDePasse) {
+      setError("Veuillez remplir tous les champs obligatoires")
+      return
     }
-  } catch (err) {
-    console.error(err)
-    setError(err.message || "Erreur serveur")
-  } finally {
-    setLoading(false)
+    if (adminForm.motDePasse !== adminForm.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas")
+      return
+    }
+    setLoading(true)
+    try {
+      const { confirmPassword, ...dataToSend } = adminForm
+      const result = await registerAdmin(dataToSend)
+      if (result.token) {
+        login(result.admin, result.token, 'admin')
+        navigate("/profil-admin")
+      } else {
+        setError(result.message || "Erreur lors de l'inscription")
+      }
+    } catch (err) {
+      setError(err.message || "Erreur serveur")
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
   return (
     <div className="auth-page">
-
-      {/* ================= LEFT ================= */}
       <div className="auth-card auth-card--scroll">
 
         <a href="#" className="auth-logo">
@@ -144,17 +106,14 @@ function RegisterPage() {
             onClick={() => { setOnglet("etudiant"); setError("") }}
           >
             🎓 Étudiant
-          </button> 
+          </button>
           <button
-        type="button"
-        className={onglet === "admin" ? "active" : ""}
-        onClick={() => {
-          setOnglet("admin")
-          setError("")
-        }}
-      >
-        🏢 Admin
-</button>
+            type="button"
+            className={onglet === "admin" ? "active" : ""}
+            onClick={() => { setOnglet("admin"); setError("") }}
+          >
+            🏢 Admin
+          </button>
         </div>
 
         {error && (
@@ -163,170 +122,62 @@ function RegisterPage() {
           </p>
         )}
 
-        {/* ── FORMULAIRE ÉTUDIANT ── */}
         {onglet === "etudiant" && (
           <form onSubmit={handleSubmitEtudiant}>
             <div className="form-row">
-              <InputField
-                label="Prénom"
-                icon="user"
-                value={prenom}
-                onChange={(e) => setPrenom(e.target.value)}
-              />
-              <InputField
-                label="Nom"
-                icon="user"
-                value={nom}
-                onChange={(e) => setNom(e.target.value)}
-              />
+              <InputField label="Prénom" icon="user" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
+              <InputField label="Nom" icon="user" value={nom} onChange={(e) => setNom(e.target.value)} />
             </div>
-            <InputField
-              label="Adresse e-mail"
-              type="email"
-              icon="mail"
-              placeholder="exemple@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <InputField
-              label="Mot de passe"
-              type="password"
-              icon="lock"
-              placeholder="••••••••••"
-              value={motDePasse}
-              onChange={(e) => setMotDePasse(e.target.value)}
-            />
-            <InputField
-              label="Confirmer mot de passe"
-              type="password"
-              icon="lock"
-              placeholder="••••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+            <InputField label="Adresse e-mail" type="email" icon="mail" placeholder="exemple@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <InputField label="Mot de passe" type="password" icon="lock" placeholder="••••••••••" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} />
+            <InputField label="Confirmer mot de passe" type="password" icon="lock" placeholder="••••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
             <button className="primary-btn" type="submit" disabled={loading}>
               {loading ? "Chargement..." : "S'inscrire"}
             </button>
           </form>
         )}
 
-        {/* ── FORMULAIRE ÉCOLE ── */}
         {onglet === "admin" && (
-  <form onSubmit={handleSubmitAdmin}>
-
-    <div className="form-group">
-      <label>Nom Admin *</label>
-
-      <div className="input-wrapper">
-        <input
-          name="nomAdmin"
-          type="text"
-          placeholder="JobMap"
-          value={adminForm.nomAdmin}
-          onChange={handleAdminChange}
-          required
-          style={{ paddingLeft: "14px" }}
-        />
-      </div>
-    </div>
-
-    <div className="form-group">
-      <label>Email *</label>
-
-      <div className="input-wrapper">
-        <input
-          name="email"
-          type="email"
-          placeholder="admin@jobmap.com"
-          value={adminForm.email}
-          onChange={handleAdminChange}
-          required
-          style={{ paddingLeft: "14px" }}
-        />
-      </div>
-    </div>
-
-    <div className="form-group">
-      <label>
-        URL Photo de Profil
-        <span className="optional-label">
-          (optionnel)
-        </span>
-      </label>
-
-      <div className="input-wrapper">
-        <input
-          name="photoProfilUrl"
-          type="url"
-          placeholder="https://..."
-          value={adminForm.photoProfilUrl}
-          onChange={handleAdminChange}
-          style={{ paddingLeft: "14px" }}
-        />
-      </div>
-    </div>
-
-    <div className="form-group">
-      <label>
-        Description
-        <span className="optional-label">
-          (optionnel)
-        </span>
-      </label>
-
-      <textarea
-        name="description"
-        rows={4}
-        value={adminForm.description}
-        onChange={handleAdminChange}
-        placeholder="Description..."
-      />
-    </div>
-
-    <div className="form-group">
-      <label>Mot de passe *</label>
-
-      <div className="input-wrapper">
-        <input
-          name="motDePasse"
-          type="password"
-          placeholder="••••••••"
-          value={adminForm.motDePasse}
-          onChange={handleAdminChange}
-          required
-          style={{ paddingLeft: "14px" }}
-        />
-      </div>
-    </div>
-
-    <div className="form-group">
-      <label>Confirmer le mot de passe *</label>
-
-      <div className="input-wrapper">
-        <input
-          name="confirmPassword"
-          type="password"
-          placeholder="••••••••"
-          value={adminForm.confirmPassword}
-          onChange={handleAdminChange}
-          required
-          style={{ paddingLeft: "14px" }}
-        />
-      </div>
-    </div>
-
-    <button
-      className="primary-btn"
-      type="submit"
-      disabled={loading}
-    >
-      {loading
-        ? "Inscription..."
-        : "Créer un compte Admin"}
-    </button>
-
-  </form>
-)}
+          <form onSubmit={handleSubmitAdmin}>
+            <div className="form-group">
+              <label>Nom Admin *</label>
+              <div className="input-wrapper">
+                <input name="nomAdmin" type="text" placeholder="JobMap" value={adminForm.nomAdmin} onChange={handleAdminChange} required style={{ paddingLeft: "14px" }} />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Email *</label>
+              <div className="input-wrapper">
+                <input name="email" type="email" placeholder="admin@jobmap.com" value={adminForm.email} onChange={handleAdminChange} required style={{ paddingLeft: "14px" }} />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>URL Photo de Profil <span className="optional-label">(optionnel)</span></label>
+              <div className="input-wrapper">
+                <input name="photoProfilUrl" type="url" placeholder="https://..." value={adminForm.photoProfilUrl} onChange={handleAdminChange} style={{ paddingLeft: "14px" }} />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Description <span className="optional-label">(optionnel)</span></label>
+              <textarea name="description" rows={4} value={adminForm.description} onChange={handleAdminChange} placeholder="Description..." />
+            </div>
+            <div className="form-group">
+              <label>Mot de passe *</label>
+              <div className="input-wrapper">
+                <input name="motDePasse" type="password" placeholder="••••••••" value={adminForm.motDePasse} onChange={handleAdminChange} required style={{ paddingLeft: "14px" }} />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Confirmer le mot de passe *</label>
+              <div className="input-wrapper">
+                <input name="confirmPassword" type="password" placeholder="••••••••" value={adminForm.confirmPassword} onChange={handleAdminChange} required style={{ paddingLeft: "14px" }} />
+              </div>
+            </div>
+            <button className="primary-btn" type="submit" disabled={loading}>
+              {loading ? "Inscription..." : "Créer un compte Admin"}
+            </button>
+          </form>
+        )}
 
         <p className="bottom-text">
           Déjà un compte ? <Link to="/login">Se connecter</Link>
@@ -334,10 +185,9 @@ function RegisterPage() {
 
       </div>
 
-      {/* ================= RIGHT ================= */}
       <div className="auth-panel">
         <div className="auth-panel-illustration">
-          <svg viewBox="0 0 500 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 500 380" fill="none">
             <circle cx="420" cy="80" r="60" fill="#BFDBFE" opacity="0.35" />
             <circle cx="90" cy="300" r="45" fill="#93C5FD" opacity="0.25" />
             <rect x="130" y="70" width="240" height="240" rx="18" fill="white" opacity="0.95" />
