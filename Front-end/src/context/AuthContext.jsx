@@ -13,17 +13,30 @@ export function AuthProvider({ children }) {
   })
 
   const [token] = useState(() => localStorage.getItem('token'))
+  const [authLoading, setAuthLoading] = useState(!!localStorage.getItem('token'))
 
   useEffect(() => {
-    if (!token) return
+    if (!token) {
+      setAuthLoading(false)
+      return
+    }
 
-    const role = localStorage.getItem('role')
+    const savedUser = (() => {
+      try { return JSON.parse(localStorage.getItem('user')) } catch { return null }
+    })()
+    const role = savedUser?.role || localStorage.getItem('role')
 
-    // ← choisit la bonne route selon le rôle
-    const profilUrl =
-      role === 'admin'
-        ? '/api/auth/admin/profil'
-        : '/api/auth/etudiant/profil'
+    if (!role) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      setUser(null)
+      setAuthLoading(false)
+      return
+    }
+
+    const profilUrl = role === 'admin'
+      ? '/api/auth/admin/profil'
+      : '/api/auth/etudiant/profil'
 
     fetch(profilUrl, {
       headers: { Authorization: `Bearer ${token}` },
@@ -35,6 +48,7 @@ export function AuthProvider({ children }) {
       .then(data => {
         const updatedUser = { ...data, role }
         localStorage.setItem('user', JSON.stringify(updatedUser))
+        localStorage.setItem('role', role)
         setUser(updatedUser)
       })
       .catch(() => {
@@ -43,13 +57,17 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('role')
         setUser(null)
       })
+      .finally(() => {
+        setAuthLoading(false)
+      })
   }, [token])
 
   const login = (userData, token, role) => {
+    const userWithRole = { ...userData, role }
     localStorage.setItem('token', token)
     localStorage.setItem('role', role)
-    localStorage.setItem('user', JSON.stringify(userData))
-    setUser(userData)
+    localStorage.setItem('user', JSON.stringify(userWithRole))
+    setUser(userWithRole)
   }
 
   const logout = () => {
@@ -63,6 +81,8 @@ export function AuthProvider({ children }) {
   const isEtudiant = user?.role === 'etudiant'
   const isAdmin = user?.role === 'admin'
   const isAuthenticated = !!user && !!localStorage.getItem('token')
+
+  if (authLoading) return null
 
   return (
     <AuthContext.Provider value={{ user, setUser, login, logout, isEtudiant, isAdmin, isAuthenticated }}>

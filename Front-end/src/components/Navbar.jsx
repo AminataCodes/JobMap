@@ -47,7 +47,6 @@ function Navbar() {
   return (
     <nav className="app-navbar">
 
-      {/* LOGO */}
       <div className="nav-logo" onClick={() => navigate("/")}>
         <svg width="22" height="28" viewBox="0 0 22 28" fill="none">
           <path
@@ -59,10 +58,8 @@ function Navbar() {
         <span>JobMap</span>
       </div>
 
-      {/* LIENS */}
       <div className="nav-links">
         <Link to="/" className={isActive("/")}>Accueil</Link>
-
         {isEtudiant && (
           <>
             <Link to="/candidatures" className={isActive("/candidatures")}>Mes candidatures</Link>
@@ -71,7 +68,6 @@ function Navbar() {
         )}
       </div>
 
-      {/* ACTIONS DROITE */}
       <div className="nav-actions">
 
         {isAuthenticated && (
