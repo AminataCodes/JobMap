@@ -1,5 +1,5 @@
 import express from 'express'
-import { register, login, getProfil } from '../controllers/auth.ecole.controller.js'
+import { register, login, getProfil } from '../controllers/auth.admin.controller.js'
 import { ajouterFormation, supprimerFormation } from '../controllers/formation.controller.js'
 import { ajouterOffre, supprimerOffre } from '../controllers/offre.controller.js'
 import { verifyToken } from '../middlewares/auth.middleware.js'
