@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useAuth } from "../context/AuthContext";
-import { loginEtudiant, loginEcole } from "../services/api";
+import { loginEtudiant, loginAdmin } from "../services/api";
 import "../styles/auth.css";
 
 function LoginPage() {
@@ -13,8 +13,8 @@ function LoginPage() {
   const [motDePasse, setMotDePasse] = useState("");
 
   // École
-  const [emailEcole, setEmailEcole] = useState("");
-  const [motDePasseEcole, setMotDePasseEcole] = useState("");
+  const [emailAdmin, setEmailAdmin] = useState("");
+  const [motDePasseAdmin, setMotDePasseAdmin] = useState("");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,31 +42,44 @@ function LoginPage() {
     }
   };
 
-  // ── Submit École ──
-  const handleSubmitEcole = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (!emailEcole || !motDePasseEcole) {
-      setError("Veuillez remplir tous les champs");
-      return;
+  // ── Submit Admin ──
+  const handleSubmitAdmin = async (e) => {
+  e.preventDefault();
+
+  setError("");
+
+  if (!emailAdmin || !motDePasseAdmin) {
+    setError("Veuillez remplir tous les champs");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const data = await loginAdmin({
+      email: emailAdmin,
+      motDePasse: motDePasseAdmin,
+    });
+
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", "admin");
+      localStorage.setItem(
+        "admin",
+        JSON.stringify(data.admin)
+      );
+
+      navigate("/profil-admin");
+    } else {
+      setError(data.message || "Identifiants incorrects");
     }
-    setLoading(true);
-    try {
-      const data = await loginEcole({ emailPro: emailEcole, password: motDePasseEcole });
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", "ecole");
-        localStorage.setItem("ecole", JSON.stringify(data.ecole));
-        navigate("/profil-ecole");
-      } else {
-        setError(data.message || "Identifiants incorrects");
-      }
-    } catch {
-      setError("Erreur serveur");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    setError("Erreur serveur");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="auth-page">
@@ -96,12 +109,15 @@ function LoginPage() {
             🎓 Étudiant
           </button>
           <button
-            type="button"
-            className={onglet === "ecole" ? "active" : ""}
-            onClick={() => { setOnglet("ecole"); setError(""); }}
-          >
-            🏫 École
-          </button>
+          type="button"
+          className={onglet === "admin" ? "active" : ""}
+          onClick={() => {
+            setOnglet("admin");
+            setError("");
+          }}
+        >
+  🏢 Admin
+</button>
         </div>
 
         {error && (
@@ -139,31 +155,38 @@ function LoginPage() {
         )}
 
         {/* ── Formulaire École ── */}
-        {onglet === "ecole" && (
-          <form onSubmit={handleSubmitEcole}>
-            <InputField
-              label="Email professionnel"
-              type="email"
-              icon="mail"
-              placeholder="contact@ecole.fr"
-              value={emailEcole}
-              onChange={(e) => setEmailEcole(e.target.value)}
-            />
-            <InputField
-              label="Mot de passe"
-              type="password"
-              icon="lock"
-              placeholder="••••••••••"
-              value={motDePasseEcole}
-              onChange={(e) => setMotDePasseEcole(e.target.value)}
-            />
-            <Link to="/forgot-password" className="forgot-link">
-              Mot de passe oublié ?
-            </Link>
-            <button className="primary-btn" type="submit" disabled={loading}>
-              {loading ? "Connexion..." : "Se connecter"}
-            </button>
-          </form>
+        {onglet === "admin" && (
+          <form onSubmit={handleSubmitAdmin}>
+  <InputField
+    label="Adresse e-mail"
+    type="email"
+    icon="mail"
+    placeholder="admin@jobmap.com"
+    value={emailAdmin}
+    onChange={(e) => setEmailAdmin(e.target.value)}
+  />
+
+  <InputField
+    label="Mot de passe"
+    type="password"
+    icon="lock"
+    placeholder="••••••••••"
+    value={motDePasseAdmin}
+    onChange={(e) => setMotDePasseAdmin(e.target.value)}
+  />
+
+  <Link to="/forgot-password" className="forgot-link">
+    Mot de passe oublié ?
+  </Link>
+
+  <button
+    className="primary-btn"
+    type="submit"
+    disabled={loading}
+  >
+    {loading ? "Connexion..." : "Se connecter"}
+  </button>
+</form>
         )}
 
         <p className="bottom-text">

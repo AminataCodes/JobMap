@@ -63,7 +63,7 @@ function App() {
               <Route path="/calendrier" element={<Calendrier />} />
               <Route path="/entretiens" element={<AppointementPage />} />
               <Route path="/calendar/:id" element={<AppointementPage />} />
-              <Route path="/profil-ecole" element={<ProfilEcolePage />} />
+              <Route path="/profil-admin" element={<ProfilEcolePage />} />
 
             </Routes>
           </main>

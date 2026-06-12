@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import InputField from "../components/InputField"
-import { registerEtudiant, registerEcole } from "../services/api"
+import { registerEtudiant, registerAdmin } from "../services/api"
 import { useAuth } from "../context/AuthContext"
 import "../styles/auth.css"
 
@@ -99,7 +99,7 @@ function RegisterPage() {
   try {
     const { confirmPassword, ...dataToSend } = adminForm
 
-    const result = await registerEcole(dataToSend)
+    const result = await registerAdmin(dataToSend)
 
     if (result.token) {
       localStorage.setItem("token", result.token)
