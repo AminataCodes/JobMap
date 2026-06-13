@@ -1,0 +1,5 @@
+curl -s -X POST http://localhost:3000/api/extraction \
+-H "Content-Type: application/json" \
+-d '{
+  "url":"https://www.hellowork.com/fr-fr/emplois/45566308.html"
+}' | jq
