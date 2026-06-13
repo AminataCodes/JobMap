@@ -14,6 +14,7 @@ import ProfilPage from "./pages/ProfilPage"
 import Messagerie from "./pages/Messagerie"
 import Calendrier from "./pages/Calendrier"
 import AppointementPage from "./pages/AppointementPage"
+import OffresPage from "./pages/OffresPage"
 
 /* =========================
    CANDIDATURE (STUDENT ONLY)
@@ -64,6 +65,7 @@ function App() {
               <Route path="/entretiens" element={<AppointementPage />} />
               <Route path="/calendar/:id" element={<AppointementPage />} />
               <Route path="/profil-admin" element={<ProfilEcolePage />} />
+              <Route path="/offres" element={<OffresPage />} />
 
             </Routes>
           </main>
