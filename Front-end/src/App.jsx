@@ -13,6 +13,8 @@ import ProfilPage from "./pages/ProfilPage"
 import Messagerie from "./pages/Messagerie"
 import Calendrier from "./pages/Calendrier"
 import AppointementPage from "./pages/AppointementPage"
+import OffresPage from "./pages/OffresPage"
+import PublierOffre from "./pages/PublierOffre"
 import OffreDetailPage from "./pages/OffreDetailPage"
 
 import {
@@ -55,7 +57,8 @@ function App() {
               <Route path="/entretiens" element={<AppointementPage />} />
               <Route path="/calendar/:id" element={<AppointementPage />} />
               <Route path="/profil-admin" element={<ProfilEcolePage />} />
-
+              <Route path="/offres" element={<OffresPage />} />
+              <Route path="/publier-offre" element={<PublierOffre />} />
             </Routes>
           </main>
 
