@@ -8,16 +8,13 @@ import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
-import ProfilEcolePage from "./pages/ProfilEcolePage";
-
+import ProfilEcolePage from "./pages/ProfilEcolePage"
 import ProfilPage from "./pages/ProfilPage"
 import Messagerie from "./pages/Messagerie"
 import Calendrier from "./pages/Calendrier"
 import AppointementPage from "./pages/AppointementPage"
+import OffreDetailPage from "./pages/OffreDetailPage"
 
-/* =========================
-   CANDIDATURE (STUDENT ONLY)
-========================= */
 import {
   Candidature,
   Candidatures
@@ -37,28 +34,22 @@ function App() {
           <main className="app-main-content">
             <Routes>
 
-              {/* =========================
-                  PAGES PUBLIQUES
-              ========================= */}
+              {/* PUBLIQUES */}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
 
-              {/* =========================
-                  ETUDIANT
-              ========================= */}
-              <Route path="/profil" element={<ProfilPage />} />
+              {/* OFFRE DÉTAIL — simulation stable */}
+              <Route path="/offres/:id" element={<OffreDetailPage />} />
+              <Route path="/offres" element={<OffreDetailPage />} />
 
-              {/* liste + suivi candidatures */}
+              {/* ÉTUDIANT */}
+              <Route path="/profil" element={<ProfilPage />} />
               <Route path="/candidatures" element={<Candidatures />} />
               <Route path="/candidatures-suivi" element={<Candidatures />} />
-
-              {/* formulaire candidature */}
               <Route path="/annonce/:id/candidature" element={<Candidature />} />
 
-              {/* =========================
-                  OUTILS
-              ========================= */}
+              {/* OUTILS */}
               <Route path="/messagerie" element={<Messagerie />} />
               <Route path="/calendrier" element={<Calendrier />} />
               <Route path="/entretiens" element={<AppointementPage />} />
