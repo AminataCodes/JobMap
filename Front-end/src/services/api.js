@@ -169,3 +169,38 @@ export const supprimerOffre = async (token, id) => {
   })
   return res.json()
 }
+
+// ──────────────────────────────────────────────
+//  OFFRES (PUBLIC + ÉCOLE)
+// ──────────────────────────────────────────────
+
+export function getOffres() {
+  return fetch(`${BASE}/offres`).then(async (res) => {
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.message || 'Erreur serveur')
+    return data
+  })
+}
+
+export function getOffreById(id) {
+  return fetch(`${BASE}/offres/${id}`).then(async (res) => {
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.message || 'Erreur serveur')
+    return data
+  })
+}
+
+export function modifierOffreApi(token, id, titre, description) {
+  return fetch(`${BASE}/offres/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ titre, description }),
+  }).then(async (res) => {
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.message || 'Erreur serveur')
+    return data
+  })
+}
