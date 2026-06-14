@@ -43,7 +43,7 @@ function App() {
 
               {/* OFFRE DÉTAIL — simulation stable */}
               <Route path="/offres/:id" element={<OffreDetailPage />} />
-              <Route path="/offres" element={<OffreDetailPage />} />
+              <Route path="/offre" element={<OffreDetailPage />} />
 
               {/* ÉTUDIANT */}
               <Route path="/profil" element={<ProfilPage />} />
