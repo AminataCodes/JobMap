@@ -1,0 +1,53 @@
+.offres-page {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.offres-page h1 {
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: #1E293B;
+}
+
+.offre-card {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.offre-titre {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 8px;
+}
+
+.offre-description {
+  font-size: 14px;
+  color: #64748B;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.offre-entreprise {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2563EB;
+}
+.offre-btn {
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.offre-btn:hover {
+  background-color: #1d4ed8;
+}

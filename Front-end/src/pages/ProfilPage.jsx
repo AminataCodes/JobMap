@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getProfilEtudiant, updateProfilEtudiant, getMesRendezVous } from '../services/api';
 import { 
-  FiUser, FiBriefcase, FiCalendar, FiLogOut, FiArrowRight, 
+  FiUser, FiBriefcase, FiCalendar, FiLogOut,
   FiPlus, FiX, FiCheckCircle, FiActivity 
 } from 'react-icons/fi';
 import '../styles/Profil.css';
@@ -69,15 +69,9 @@ function MiniCalendrier({ rdvs = [] }) {
               {day}
               {hasRdv && (
                 <span style={{
-                  position: 'absolute',
-                  bottom: 2,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 5,
-                  height: 5,
-                  borderRadius: '50%',
-                  backgroundColor: '#6366f1',
-                  display: 'block'
+                  position: 'absolute', bottom: 2, left: '50%',
+                  transform: 'translateX(-50%)', width: 5, height: 5,
+                  borderRadius: '50%', backgroundColor: '#6366f1', display: 'block'
                 }} />
               )}
             </div>
@@ -89,7 +83,7 @@ function MiniCalendrier({ rdvs = [] }) {
 }
 
 function ProfilPage() {
-  const { setUser, logout } = useAuth();
+  const { setUser, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const [profile, setProfile]           = useState(INITIAL_PROFILE);
@@ -103,7 +97,16 @@ function ProfilPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileRef = useRef();
 
+  // Redirige un admin vers son profil
   useEffect(() => {
+    if (user?.role === 'admin') {
+      navigate('/profil-admin', { replace: true });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.role === 'admin') return;
+
     Promise.all([
       getProfilEtudiant(),
       getMesRendezVous().catch(() => [])
@@ -116,9 +119,7 @@ function ProfilPage() {
           email:       data.email       || '',
           formation:   data.niveauEtude || prev.formation,
           bio:         data.bio         || prev.bio,
-          competences: data.competences?.length > 0
-                         ? data.competences
-                         : prev.competences,
+          competences: data.competences?.length > 0 ? data.competences : prev.competences,
         }));
         setRdvs(rdvData || []);
         setLoading(false);
@@ -130,9 +131,7 @@ function ProfilPage() {
       });
   }, []);
 
-  const handleChange = (field, val) => {
-    setProfile(prev => ({ ...prev, [field]: val }));
-  };
+  const handleChange = (field, val) => setProfile(prev => ({ ...prev, [field]: val }));
 
   const handleAddSkill = (e) => {
     e.preventDefault();
@@ -150,23 +149,19 @@ function ProfilPage() {
   };
 
   const handleSave = async () => {
-    if (!editing) {
-      setEditing(true);
-      return;
-    }
+    if (!editing) { setEditing(true); return; }
     setSaving(true);
     setError(null);
     try {
       const formData = new FormData();
       formData.append('nom',    profile.nom);
       formData.append('prenom', profile.prenom);
-      if (profile.formation) formData.append('niveauEtude',  profile.formation);
-      if (profile.bio)       formData.append('bio',          profile.bio);
+      if (profile.formation) formData.append('niveauEtude', profile.formation);
+      if (profile.bio)       formData.append('bio',         profile.bio);
       formData.append('competences', JSON.stringify(profile.competences || []));
-      if (selectedFile)      formData.append('cv', selectedFile);
+      if (selectedFile) formData.append('cv', selectedFile);
 
       const updated = await updateProfilEtudiant(formData);
-
       setProfile(prev => ({
         ...prev,
         prenom:      updated.prenom,
@@ -174,9 +169,7 @@ function ProfilPage() {
         email:       updated.email,
         formation:   updated.niveauEtude || prev.formation,
         bio:         updated.bio         || prev.bio,
-        competences: updated.competences?.length > 0
-                       ? updated.competences
-                       : prev.competences,
+        competences: updated.competences?.length > 0 ? updated.competences : prev.competences,
       }));
       setUser(updated);
       setEditing(false);
@@ -208,7 +201,6 @@ function ProfilPage() {
 
   return (
     <div className="profil-layout">
-
       <div className="profil-role-tabs">
         <button className={`role-tab ${currentRole === 'student' ? 'active' : ''}`} onClick={() => handleToggleRole('student')}>
           🎓 Tableau de bord Étudiant
@@ -230,9 +222,7 @@ function ProfilPage() {
         </div>
       </div>
 
-      {error && (
-        <div style={{ color: 'red', padding: '8px 16px', marginBottom: '8px' }}>{error}</div>
-      )}
+      {error && <div style={{ color: 'red', padding: '8px 16px', marginBottom: '8px' }}>{error}</div>}
 
       <main className="profil__main">
         <div className="profil-left-col">
@@ -243,7 +233,6 @@ function ProfilPage() {
                 {editing ? (saving ? '⏳ Sauvegarde…' : '💾 Sauvegarder') : '✏️ Modifier'}
               </button>
             </div>
-
             <div className="profile-identity-display">
               <div className="profile-avatar-circle">
                 {profile?.prenom ? profile.prenom[0].toUpperCase() : '?'}
@@ -251,20 +240,8 @@ function ProfilPage() {
               <div className="profile-identity-fields">
                 {editing ? (
                   <>
-                    <input
-                      type="text"
-                      className="edit-profile-input text-bold"
-                      value={profile?.prenom || ''}
-                      onChange={e => handleChange('prenom', e.target.value)}
-                      placeholder="Prénom"
-                    />
-                    <input
-                      type="text"
-                      className="edit-profile-input"
-                      value={profile?.formation || ''}
-                      onChange={e => handleChange('formation', e.target.value)}
-                      placeholder="Formation"
-                    />
+                    <input type="text" className="edit-profile-input text-bold" value={profile?.prenom || ''} onChange={e => handleChange('prenom', e.target.value)} placeholder="Prénom" />
+                    <input type="text" className="edit-profile-input" value={profile?.formation || ''} onChange={e => handleChange('formation', e.target.value)} placeholder="Formation" />
                   </>
                 ) : (
                   <>
@@ -274,31 +251,18 @@ function ProfilPage() {
                 )}
               </div>
             </div>
-
             <div className="profile-bio-container">
               <h4>À propos de moi</h4>
               {editing ? (
-                <textarea
-                  className="edit-profile-textarea"
-                  value={profile?.bio || ''}
-                  onChange={e => handleChange('bio', e.target.value)}
-                />
+                <textarea className="edit-profile-textarea" value={profile?.bio || ''} onChange={e => handleChange('bio', e.target.value)} />
               ) : (
                 <p className="profile-bio-text">"{profile?.bio || 'Aucune biographie rédigée pour le moment.'}"</p>
               )}
             </div>
-
             <div className="profile-contact-line">
               <span>📧 {profile?.email || 'non-renseigné@hetic.net'}</span>
             </div>
-
-            <input
-              type="file"
-              ref={fileRef}
-              hidden
-              accept=".pdf"
-              onChange={handleFileChange}
-            />
+            <input type="file" ref={fileRef} hidden accept=".pdf" onChange={handleFileChange} />
             <button className="btn-upload-cv" onClick={() => fileRef.current.click()}>
               {selectedFile ? `📎 ${selectedFile.name}` : '📁 Mettre à jour mon CV (PDF)'}
             </button>
@@ -316,12 +280,7 @@ function ProfilPage() {
               ))}
             </div>
             <form onSubmit={handleAddSkill} className="add-skill-inline-form">
-              <input
-                type="text"
-                placeholder="Ex: Vue.js, Docker..."
-                value={newSkill}
-                onChange={e => setNewSkill(e.target.value)}
-              />
+              <input type="text" placeholder="Ex: Vue.js, Docker..." value={newSkill} onChange={e => setNewSkill(e.target.value)} />
               <button type="submit" title="Ajouter la compétence"><FiPlus /></button>
             </form>
           </section>
@@ -342,10 +301,7 @@ function ProfilPage() {
                     <strong>{c.poste}</strong>
                     <span>{c.entreprise} • <small>{c.lieu}</small></span>
                   </div>
-                  <span
-                    className="status-pill-premium"
-                    style={{ backgroundColor: STATUT_CONFIG[c.statut]?.bg, color: STATUT_CONFIG[c.statut]?.color }}
-                  >
+                  <span className="status-pill-premium" style={{ backgroundColor: STATUT_CONFIG[c.statut]?.bg, color: STATUT_CONFIG[c.statut]?.color }}>
                     {c.statut}
                   </span>
                 </div>

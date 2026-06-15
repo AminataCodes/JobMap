@@ -33,13 +33,20 @@ function Navbar() {
     navigate("/login");
   };
 
+  const handleProfilClick = () => {
+    if (user?.role === "admin") {
+      navigate("/profil-admin");
+    } else {
+      navigate("/profil");
+    }
+  };
+
   const isActive = (path) =>
     location.pathname === path ? "nav-item active" : "nav-item";
 
   return (
     <nav className="app-navbar">
 
-      {/* LOGO */}
       <div className="nav-logo" onClick={() => navigate("/")}>
         <svg width="22" height="28" viewBox="0 0 22 28" fill="none">
           <path
@@ -51,10 +58,8 @@ function Navbar() {
         <span>JobMap</span>
       </div>
 
-      {/* LIENS */}
       <div className="nav-links">
         <Link to="/" className={isActive("/")}>Accueil</Link>
-
         {isEtudiant && (
           <>
             <Link to="/candidatures" className={isActive("/candidatures")}>Mes candidatures</Link>
@@ -69,7 +74,6 @@ function Navbar() {
      )}
       </div>
 
-      {/* ACTIONS DROITE */}
       <div className="nav-actions">
 
         {isAuthenticated && (
@@ -88,9 +92,9 @@ function Navbar() {
 
         {isAuthenticated ? (
           <div className="nav-user">
-            <div className="nav-profile-pill" onClick={() => navigate("/profil")}>
+            <div className="nav-profile-pill" onClick={handleProfilClick}>
               <div className="nav-avatar"><FiUser size={14} /></div>
-              <span className="nav-username">{user?.nom}</span>
+              <span className="nav-username">{user?.nom || user?.nomAdmin}</span>
             </div>
             <button className="nav-icon-btn logout-btn" onClick={handleLogout} title="Se déconnecter">
               <FiLogOut size={16} />

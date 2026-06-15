@@ -3,7 +3,7 @@ import { createOffre } from "../services/offre.service"
 
 export default function PublierOffre() {
 
-    const [format, setFormat] = useState("") // "pdf" | "lien" | "texte"
+    const [format, setFormat] = useState("")
 
     const [formData, setFormData] = useState({
         nomEntreprise: "",
@@ -36,7 +36,6 @@ export default function PublierOffre() {
             let payload
 
             if (format === "pdf") {
-                // On envoie un FormData pour pouvoir envoyer le fichier
                 payload = new FormData()
                 payload.append("pdf", pdfFile)
                 payload.append("format", "pdf")
@@ -55,9 +54,9 @@ export default function PublierOffre() {
             }
 
             await createOffre(payload, token)
+
             setMessage("Offre publiée avec succès ✅")
 
-            // Reset
             setFormat("")
             setPdfFile(null)
             setFormData({
@@ -84,7 +83,6 @@ export default function PublierOffre() {
 
             <form onSubmit={handleSubmit}>
 
-                {/* 🔽 MENU DÉROULANT FORMAT */}
                 <label>Format de l'offre</label>
                 <select value={format} onChange={handleFormatChange} required>
                     <option value="">Sélectionner un format...</option>
@@ -94,29 +92,28 @@ export default function PublierOffre() {
                 </select>
 
                 {format === "pdf" && (
-    <>
-        <label>Fichier PDF</label>
-        <div className="file-upload-zone" onClick={() => document.getElementById("pdf-input").click()}>
-            <span className="file-upload-icon">📄</span>
-            <span className="file-upload-text">
-                {pdfFile ? pdfFile.name : "Cliquer pour choisir un fichier PDF"}
-            </span>
-            <span className="file-upload-hint">
-                {pdfFile ? "✅ Fichier sélectionné" : "Format accepté : .pdf"}
-            </span>
-        </div>
-        <input
-            id="pdf-input"
-            type="file"
-            accept=".pdf"
-            onChange={(e) => setPdfFile(e.target.files[0])}
-            required
-            style={{ display: "none" }}
-        />
-    </>
-)}
+                    <>
+                        <label>Fichier PDF</label>
+                        <div className="file-upload-zone" onClick={() => document.getElementById("pdf-input").click()}>
+                            <span className="file-upload-icon">📄</span>
+                            <span className="file-upload-text">
+                                {pdfFile ? pdfFile.name : "Cliquer pour choisir un fichier PDF"}
+                            </span>
+                            <span className="file-upload-hint">
+                                {pdfFile ? "✅ Fichier sélectionné" : "Format accepté : .pdf"}
+                            </span>
+                        </div>
+                        <input
+                            id="pdf-input"
+                            type="file"
+                            accept=".pdf"
+                            onChange={(e) => setPdfFile(e.target.files[0])}
+                            required
+                            style={{ display: "none" }}
+                        />
+                    </>
+                )}
 
-                {/* 🔗 FORMAT LIEN */}
                 {format === "lien" && (
                     <>
                         <label>Lien de l'offre</label>
@@ -131,7 +128,6 @@ export default function PublierOffre() {
                     </>
                 )}
 
-                {/* 📝 FORMAT TEXTE */}
                 {format === "texte" && (
                     <>
                         <label>Entreprise</label>
@@ -195,7 +191,6 @@ export default function PublierOffre() {
                     </>
                 )}
 
-                {/* Bouton visible seulement si un format est choisi */}
                 {format && (
                     <button type="submit">Publier</button>
                 )}

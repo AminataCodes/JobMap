@@ -1,18 +1,22 @@
-import express from 'express'
-
+import { Router } from 'express'
 import {
-    createOffre,
-    getOffres
+  ajouterOffre,
+  supprimerOffre,
+  getOffres,
+  getOffreById,
+  modifierOffre,
 } from '../controllers/offre.controller.js'
+import { verifyToken, isEcole } from '../middlewares/auth.middleware.js'
 
-import {
-    verifyToken
-} from '../middlewares/auth.middleware.js'
+const router = Router()
 
-const router = express.Router()
-
-router.post('/', verifyToken, createOffre)
-
+// PUBLIC
 router.get('/', getOffres)
+router.get('/:id', getOffreById)
+
+// PROTÉGÉ (école seulement)
+router.post('/', verifyToken, isEcole, ajouterOffre)
+router.put('/:id', verifyToken, isEcole, modifierOffre)
+router.delete('/:id', verifyToken, isEcole, supprimerOffre)
 
 export default router
