@@ -17,6 +17,8 @@ import OffresPage from "./pages/OffresPage"
 import PublierOffre from "./pages/PublierOffre"
 import OffreDetailPage from "./pages/OffreDetailPage"
 
+import OffrePreviewPage from "./pages/OffrePreviewPage";
+
 import {
   Candidature,
   Candidatures
@@ -130,6 +132,15 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              {/* OUTILS */}
+              <Route path="/messagerie" element={<Messagerie />} />
+              <Route path="/calendrier" element={<Calendrier />} />
+              <Route path="/entretiens" element={<AppointementPage />} />
+              <Route path="/calendar/:id" element={<AppointementPage />} />
+              <Route path="/profil-admin" element={<ProfilEcolePage />} />
+              <Route path="/offres" element={<OffresPage />} />
+              <Route path="/publier-offre" element={<PublierOffre />} />
+              <Route path="/offre-preview" element={<OffrePreviewPage />} />
             </Routes>
           </main>
 
