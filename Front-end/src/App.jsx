@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom"
 
 import { ThemeProvider } from "./context/ThemeContext"
 import { AuthProvider } from "./context/AuthContext"
-
+import ProtectedRoute from "./components/ProtectedRoute"
 import Navbar from "./components/Navbar"
 
 import Home from "./pages/Home"
@@ -48,11 +48,90 @@ function App() {
               <Route path="/offre" element={<OffreDetailPage />} />
 
               {/* ÉTUDIANT */}
-              <Route path="/profil" element={<ProfilPage />} />
-              <Route path="/candidatures" element={<Candidatures />} />
-              <Route path="/candidatures-suivi" element={<Candidatures />} />
-              <Route path="/annonce/:id/candidature" element={<Candidature />} />
+              <Route
+                path="/profil"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant"]}>
+                    <ProfilPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/candidatures"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant"]}>
+                    <Candidatures />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/candidatures-suivi"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant"]}>
+                    <Candidatures />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/annonce/:id/candidature"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant"]}>
+                    <Candidature />
+                  </ProtectedRoute>
+                }
+              />
 
+              {/* OUTILS — accessibles aux 2 rôles connectés */}
+              <Route
+                path="/messagerie"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant", "admin"]}>
+                    <Messagerie />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/calendrier"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant", "admin"]}>
+                    <Calendrier />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/entretiens"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant", "admin"]}>
+                    <AppointementPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/calendar/:id"
+                element={
+                  <ProtectedRoute allowedRoles={["etudiant", "admin"]}>
+                    <AppointementPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* ADMIN */}
+              <Route
+                path="/profil-admin"
+                element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <ProfilEcolePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/publier-offre"
+                element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <PublierOffre />
+                  </ProtectedRoute>
+                }
+              />
               {/* OUTILS */}
               <Route path="/messagerie" element={<Messagerie />} />
               <Route path="/calendrier" element={<Calendrier />} />
