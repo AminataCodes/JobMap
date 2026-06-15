@@ -8,7 +8,7 @@ import "../styles/Navbar.css";
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, isAuthenticated, isEtudiant, logout } = useAuth();
+  const { user, isAuthenticated, isEtudiant, isAdmin, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -61,6 +61,12 @@ function Navbar() {
             <Link to="/messagerie" className={isActive("/messagerie")}>Messagerie</Link>
           </>
         )}
+        {isAdmin && (
+          <>
+            <Link to="/publier-offre" className={isActive("/publier-offre")}>Publier</Link>
+            <Link to="/offres" className={isActive("/offres")}>Offres</Link>
+          </>
+     )}
       </div>
 
       {/* ACTIONS DROITE */}
