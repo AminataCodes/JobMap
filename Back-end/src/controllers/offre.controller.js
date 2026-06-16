@@ -4,8 +4,10 @@ import prisma from '../lib/prisma.js'
 export const getOffres = async (req, res) => {
   try {
     const offres = await prisma.offre.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { ecole: { select: { nom: true, logo: true } } },
+      orderBy: { datePublication: 'desc' },
+
+      include: { admin: { select: { nomAdmin: true, photoProfilUrl: true } } },
+
     })
     return res.json(offres)
   } catch (err) {
@@ -19,7 +21,9 @@ export const getOffreById = async (req, res) => {
   try {
     const offre = await prisma.offre.findUnique({
       where: { id: req.params.id },
-      include: { ecole: { select: { nom: true, logo: true, email: true } } },
+
+      include: { admin: { select: { nomAdmin: true, photoProfilUrl: true, email: true } } },
+
     })
     if (!offre) return res.status(404).json({ message: 'Offre introuvable' })
     return res.json(offre)
@@ -29,17 +33,23 @@ export const getOffreById = async (req, res) => {
   }
 }
 
-// ── POST /api/offres ──
+// ── POST /api/auth/admin/offres ──
 export const ajouterOffre = async (req, res) => {
   try {
     const { titre, description } = req.body
-    if (!titre?.trim()) return res.status(400).json({ message: 'Le titre est requis' })
+    if (!titre?.trim()) {
+      return res.status(400).json({ message: 'Le titre est requis' })
+    }
 
     const offre = await prisma.offre.create({
       data: {
-        titre: titre.trim(),
-        description: description?.trim() || null,
-        ecoleId: req.user.id,
+        nomPoste:    titre.trim(),
+        description: description?.trim() || '',
+        nomEntreprise: '',
+        lieu:        '',
+
+        adminId:     req.user.uid,
+
       },
     })
     return res.status(201).json(offre)
@@ -57,12 +67,16 @@ export const modifierOffre = async (req, res) => {
 
     const offre = await prisma.offre.findUnique({ where: { id } })
     if (!offre) return res.status(404).json({ message: 'Offre introuvable' })
-    if (offre.ecoleId !== req.user.id) return res.status(403).json({ message: 'Non autorisé' })
+
+    if (offre.adminId !== req.user.uid) {
+      return res.status(403).json({ message: 'Non autorisé' })
+    }
+
 
     const updated = await prisma.offre.update({
       where: { id },
       data: {
-        titre: titre?.trim() || offre.titre,
+        nomPoste:    titre?.trim()       || offre.nomPoste,
         description: description?.trim() ?? offre.description,
       },
     })
@@ -73,13 +87,17 @@ export const modifierOffre = async (req, res) => {
   }
 }
 
-// ── DELETE /api/offres/:id ──
+// ── DELETE /api/auth/admin/offres/:id ──
 export const supprimerOffre = async (req, res) => {
   try {
     const { id } = req.params
     const offre = await prisma.offre.findUnique({ where: { id } })
     if (!offre) return res.status(404).json({ message: 'Offre introuvable' })
-    if (offre.ecoleId !== req.user.id) return res.status(403).json({ message: 'Non autorisé' })
+
+    if (offre.adminId !== req.user.uid) {
+      return res.status(403).json({ message: 'Non autorisé' })
+    }
+
 
     await prisma.offre.delete({ where: { id } })
     return res.json({ message: 'Offre supprimée' })

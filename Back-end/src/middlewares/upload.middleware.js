@@ -1,6 +1,6 @@
 import multer from 'multer'
 
-// Stockage en mémoire (buffer) → Firebase se charge du reste
+// Stockage en mémoire (buffer) → Cloudinary se charge du reste
 const storage = multer.memoryStorage()
 
 const fileFilter = (req, file, cb) => {
@@ -10,11 +10,11 @@ const fileFilter = (req, file, cb) => {
         } else {
             cb(new Error('Le CV doit être un PDF'), false)
         }
-    } else if (file.fieldname === 'logo') {
+    } else if (file.fieldname === 'logo' || file.fieldname === 'photoProfil') {
         if (file.mimetype.startsWith('image/')) {
             cb(null, true)
         } else {
-            cb(new Error('Le logo doit être une image'), false)
+            cb(new Error('Le fichier doit être une image'), false)
         }
     } else {
         cb(null, true)

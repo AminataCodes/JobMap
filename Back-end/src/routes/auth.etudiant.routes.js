@@ -12,7 +12,16 @@ router.get('/verify-email/:token', verifyEmail)
 
 // ── Routes Profil protégées ────────────────────────────────
 router.get('/profil',  verifyToken, isEtudiant, getProfil)
-router.put('/profil',  verifyToken, isEtudiant, upload.single('cv'), updateProfil)
+router.put(
+  '/profil',
+  verifyToken,
+  isEtudiant,
+  upload.fields([
+    { name: 'cv', maxCount: 1 },
+    { name: 'photoProfil', maxCount: 1 },
+  ]),
+  updateProfil
+)
 
 // ── Route dev uniquement ───────────────────────────────────
 router.get('/verify-dev/:email', async (req, res) => {
