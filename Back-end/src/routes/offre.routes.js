@@ -1,22 +1,20 @@
-import { Router } from 'express'
+import express from "express";
+import { verifyToken } from "../middlewares/auth.middleware.js";
 import {
-  ajouterOffre,
-  supprimerOffre,
-  getOffres,
+  createOffre,
+  getAllOffres,
   getOffreById,
-  modifierOffre,
-} from '../controllers/offre.controller.js'
-import { verifyToken, isEcole } from '../middlewares/auth.middleware.js'
+  updateOffre,
+  deleteOffre,
+} from "../controllers/offre-controller.js";
 
-const router = Router()
+const router = express.Router();
 
-// PUBLIC
-router.get('/', getOffres)
-router.get('/:id', getOffreById)
+router.get("/", getAllOffres);
+router.get("/:id", getOffreById);
 
-// PROTÉGÉ (école seulement)
-router.post('/', verifyToken, isEcole, ajouterOffre)
-router.put('/:id', verifyToken, isEcole, modifierOffre)
-router.delete('/:id', verifyToken, isEcole, supprimerOffre)
+router.post("/", verifyToken, createOffre);
+router.put("/:id", verifyToken, updateOffre);
+router.delete("/:id", verifyToken, deleteOffre);
 
-export default router
+export default router;

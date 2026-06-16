@@ -40,26 +40,41 @@ model Admin {
 }
 
 model Offre {
-  id                       String         @id @default(uuid())
+  id               String   @id @default(uuid())
+  adminId          String
 
-  adminId                  String
+  // ── Hero card ──
+  nomPoste         String
+  nomEntreprise    String
+  initiale         String?           // "C" pour Coexya
+  typeContrat      String            // "Stage", "CDI", etc.
+  lieu             String
+  salaire          String?           // "15 000 – 17 000 € / an"
+  niveauEtudes     String?           // "Bac +2 à Bac +5"
+  secteur          String?           // "Informatique · ESN"
+  reference        String?           // "SIPCDINET"
+  datePublication  DateTime          @default(now())
 
-  nomEntreprise            String
-  nomPoste                 String
+  // ── Badges ──
+  isSuperRecruteur Boolean           @default(false)
+  isReactif        Boolean           @default(false)
+  isTransparent    Boolean           @default(false)
 
-  datePublication          DateTime       @default(now())
+  // ── Corps de l'offre ──
+  description      String
+  missions         String[]          // liste de strings
+  profilRecherche  String[]          // liste de strings
+  avantages        String[]          // ["🏥 Mutuelle", "🍽️ Tickets restaurant"]
 
-  description              String
-  lieu                     String
+  // ── Étapes de recrutement ──
+  etapesRecrutement Json?
+  // Format : [{ titre: "Préqualification", description: "..." }, ...]
 
-  competencesObligatoires  String?
-  competencesSouhaitables  String?
+  // ── Sidebar recruteur ──
+  delaiReponse     String?           // "15 jours"
 
-  dateDeDebut              DateTime?
-
-  admin                    Admin          @relation(fields: [adminId], references: [uid])
-
-  candidatures             Candidature[]
+  admin            Admin             @relation(fields: [adminId], references: [uid])
+  candidatures     Candidature[]
 }
 
 model Candidature {
