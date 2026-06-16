@@ -62,7 +62,7 @@ function Navbar() {
         <Link to="/" className={isActive("/")}>Accueil</Link>
         {isEtudiant && (
           <>
-            <Link to="/candidatures" className={isActive("/candidatures")}>Mes candidatures</Link>
+            <Link to="/mes-candidatures" className={isActive("/mes-candidatures")}>Mes candidatures</Link>
             <Link to="/messagerie" className={isActive("/messagerie")}>Messagerie</Link>
           </>
         )}

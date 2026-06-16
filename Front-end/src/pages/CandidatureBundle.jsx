@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { FiCheckCircle, FiClock } from "react-icons/fi"
 import "../styles/CandidatureBundle.css"
+import { useNavigate } from "react-router-dom"
 
 /* =========================
    MOCK CANDIDATURES
@@ -170,8 +171,6 @@ export function Candidature() {
   const { id } = useParams()
 
   const [formData, setFormData] = useState({
-    nom: "",
-    prenom: "",
     lettre: null,
     message: ""
   })
@@ -180,7 +179,6 @@ export function Candidature() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target
-
     setFormData({
       ...formData,
       [name]: files ? files[0] : value
@@ -191,14 +189,13 @@ export function Candidature() {
     e.preventDefault()
 
     const data = new FormData()
-    data.append("nom", formData.nom)
-    data.append("prenom", formData.prenom)
+    data.append("offreId", id)                  // ✅ Bug 2 corrigé
     data.append("message", formData.message)
     data.append("lettre", formData.lettre)
 
     try {
       const res = await fetch(
-        `http://localhost:3000/api/annonce/${id}/candidature`,
+        `http://localhost:3000/api/candidatures`,  // ✅ Bug 1 corrigé
         {
           method: "POST",
           headers: {
@@ -210,6 +207,9 @@ export function Candidature() {
 
       if (res.ok) {
         setSuccess(true)
+      } else {
+        const err = await res.json()
+        console.error("Erreur API :", err)
       }
     } catch (err) {
       console.error(err)
@@ -218,25 +218,10 @@ export function Candidature() {
 
   return (
     <div className="cand-page">
-
       <div className="bundle-card max-600">
         <h2>Postuler à une offre</h2>
 
         <form onSubmit={handleSubmit} className="bundle-form">
-
-          <input
-            name="nom"
-            placeholder="Nom"
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            name="prenom"
-            placeholder="Prénom"
-            onChange={handleChange}
-            required
-          />
 
           <label className="bundle-upload">
             <input
@@ -244,32 +229,100 @@ export function Candidature() {
               name="lettre"
               onChange={handleChange}
               required
+              style={{ display: "none" }}
             />
             <span>
-              {formData.lettre
-                ? formData.lettre.name
-                : "Lettre de motivation"}
+              {formData.lettre ? formData.lettre.name : "📎 Lettre de motivation"}
             </span>
           </label>
 
           <textarea
             name="message"
-            placeholder="Message..."
+            placeholder="Message additionnel (optionnel)..."
             onChange={handleChange}
           />
 
           <button type="submit" className="btn-submit">
-            Envoyer
+            Envoyer ma candidature
           </button>
 
           {success && (
             <div className="toast-success">
               <FiCheckCircle />
-              Candidature envoyée !
+              Candidature envoyée avec succès !
             </div>
           )}
 
         </form>
+      </div>
+    </div>
+  )
+}
+
+export function MesCandidatures() {
+  const [candidatures, setCandidatures] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/candidatures", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        })
+
+        const data = await res.json()
+        setCandidatures(data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return <div className="page">Chargement...</div>
+  }
+
+  return (
+    <div className="page">
+      <h2>Mes candidatures</h2>
+
+      <div className="cards-grid">
+        {candidatures.map((c) => (
+          <div key={c.id} className="cand-card">
+
+            {/* Entreprise */}
+            <h3 className="company">
+              {c.offre?.nomEntreprise}
+            </h3>
+
+            {/* Poste */}
+            <p className="role">
+              💼 {c.offre?.nomPoste}
+            </p>
+
+            {/* Date */}
+            <p className="date">
+              📅 {new Date(c.createdAt).toLocaleDateString("fr-FR")}
+            </p>
+
+            {/* Bouton voir offre */}
+            <button
+              className="btn-view"
+              onClick={() => navigate(`/offres/${c.offreId}`)}
+            >
+              Voir l'offre
+            </button>
+
+          </div>
+        ))}
       </div>
     </div>
   )

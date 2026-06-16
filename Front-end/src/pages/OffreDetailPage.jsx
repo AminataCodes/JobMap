@@ -1,37 +1,100 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/OffreDetail.css";
 
 function OffreDetailPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [offre, setOffre] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [showToast, setShowToast] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
-  const [titre, setTitre] = useState("Développeur Web .Net H/F");
-  const [description, setDescription] = useState(
-    `Pour suivre notre croissance et renforcer notre pôle d'expertise SIP, nous recherchons un Développeur Web .NET F/H, lequel mènera à bien le développement et l'intégration des projets confiés par nos clients grands comptes.
-
-La division SIP de COEXYA est un acteur majeur dans le contexte métier de la propriété industrielle. Au sein de notre pôle d'activité basé à Paris (une quarantaine d'ingénieurs), les solutions mises en place sont des applications de gestion avec composante documentaire et mise en place de services sur le WEB.
-
-Dans le cadre de gros projets de développement et d'intégration, les applications pour les offices de marques et de brevets reposent sur la réutilisation des composants logiciels métier développés par COEXYA et sur la modélisation des workflows et règles métier du client.`
-  );
+  const [titre, setTitre] = useState("");
+  const [description, setDescription] = useState("");
 
   const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
 
-  const handleSave = () => {
-    setEditMode(false);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3500);
+  // ── Fetch de l'offre ──
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/offres/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Offre introuvable");
+        return res.json();
+      })
+      .then((data) => {
+        setOffre(data);
+        setTitre(data.nomPoste);
+        setDescription(data.description);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [id]);
+
+  // ── Sauvegarde ──
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/offres/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ nomPoste: titre, description }),
+      });
+
+      if (!res.ok) throw new Error();
+
+      setOffre((prev) => ({ ...prev, nomPoste: titre, description }));
+      setEditMode(false);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3500);
+    } catch {
+      alert("Erreur lors de la sauvegarde");
+    }
   };
 
-  const handleDelete = () => {
-    setShowDeleteConfirm(false);
-    setDeleted(true);
-    setTimeout(() => navigate(-1), 2000);
+  // ── Suppression ──
+  const handleDelete = async () => {
+    try {
+      await fetch(`http://localhost:3000/api/offres/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setShowDeleteConfirm(false);
+      setDeleted(true);
+      setTimeout(() => navigate(-1), 2000);
+    } catch {
+      alert("Erreur lors de la suppression");
+    }
   };
+
+  // ── États de chargement ──
+  if (loading) {
+    return (
+      <div className="od-wrapper">
+        <p style={{ color: "#94A3B8", padding: "40px" }}>Chargement…</p>
+      </div>
+    );
+  }
+
+  if (error || !offre) {
+    return (
+      <div className="od-wrapper">
+        <button className="od-back" onClick={() => navigate(-1)}>← Retour</button>
+        <p style={{ color: "#EF4444", padding: "40px" }}>{error ?? "Offre introuvable"}</p>
+      </div>
+    );
+  }
 
   if (deleted) {
     return (
@@ -48,7 +111,7 @@ Dans le cadre de gros projets de développement et d'intégration, les applicati
   return (
     <div className="od-wrapper">
 
-      {/* ══════════ TOAST PUBLICATION ══════════ */}
+      {/* ── TOAST ── */}
       {showToast && (
         <div className="od-toast">
           <div className="od-toast-inner">
@@ -58,13 +121,13 @@ Dans le cadre de gros projets de développement et d'intégration, les applicati
         </div>
       )}
 
-      {/* ══════════ MODAL SUPPRESSION ══════════ */}
+      {/* ── MODAL SUPPRESSION ── */}
       {showDeleteConfirm && (
         <div className="od-modal-overlay">
           <div className="od-modal">
             <div className="od-modal-icon">⚠️</div>
             <h3>Supprimer cette offre ?</h3>
-            <p>Cette action est irréversible. L'offre sera définitivement supprimée.</p>
+            <p>Cette action est irréversible.</p>
             <div className="od-modal-actions">
               <button className="od-modal-cancel" onClick={() => setShowDeleteConfirm(false)}>
                 Annuler
@@ -77,23 +140,21 @@ Dans le cadre de gros projets de développement et d'intégration, les applicati
         </div>
       )}
 
-      {/* ══════════ RETOUR ══════════ */}
-      <button className="od-back" onClick={() => navigate(-1)}>
-        ← Retour
-      </button>
+      {/* ── RETOUR ── */}
+      <button className="od-back" onClick={() => navigate(-1)}>← Retour</button>
 
-      {/* ══════════ HERO CARD ══════════ */}
+      {/* ── HERO CARD ── */}
       <div className="od-hero-card">
         <div className="od-hero-top">
 
-          <div className="od-logo">C</div>
+          <div className="od-logo">{offre.initiale ?? offre.nomEntreprise.charAt(0)}</div>
 
           <div className="od-hero-info">
             <div className="od-badges-row">
-              <span className="od-badge od-badge-stage">Stage</span>
-              <span className="od-badge od-badge-super">⭐ Super recruteur</span>
-              <span className="od-badge od-badge-reactif">⚡ Réactif</span>
-              <span className="od-badge od-badge-transparent">💬 Transparent</span>
+              <span className="od-badge od-badge-stage">{offre.typeContrat}</span>
+              {offre.isSuperRecruteur && <span className="od-badge od-badge-super">⭐ Super recruteur</span>}
+              {offre.isReactif && <span className="od-badge od-badge-reactif">⚡ Réactif</span>}
+              {offre.isTransparent && <span className="od-badge od-badge-transparent">💬 Transparent</span>}
             </div>
 
             {editMode ? (
@@ -103,66 +164,50 @@ Dans le cadre de gros projets de développement et d'intégration, les applicati
                 onChange={(e) => setTitre(e.target.value)}
               />
             ) : (
-              <h1 className="od-titre">{titre}</h1>
+              <h1 className="od-titre">{offre.nomPoste}</h1>
             )}
 
-            <p className="od-company">Coexya</p>
+            <p className="od-company">{offre.nomEntreprise}</p>
 
             <div className="od-chips-row">
-              <span className="od-chip">📍 Paris 12e – 75</span>
-              <span className="od-chip">💶 15 000 – 17 000 € / an</span>
-              <span className="od-chip">🎓 Bac +2 à Bac +5</span>
-              <span className="od-chip">💻 Informatique · ESN</span>
+              {offre.lieu && <span className="od-chip">📍 {offre.lieu}</span>}
+              {offre.salaire && <span className="od-chip">💶 {offre.salaire}</span>}
+              {offre.niveauEtudes && <span className="od-chip">🎓 {offre.niveauEtudes}</span>}
+              {offre.secteur && <span className="od-chip">💻 {offre.secteur}</span>}
             </div>
 
-            <p className="od-pubdate">Publiée le 09 juin 2026 · Réf : SIPCDINET</p>
+            <p className="od-pubdate">
+              Publiée le {new Date(offre.datePublication).toLocaleDateString("fr-FR")}
+              {offre.reference && ` · Réf : ${offre.reference}`}
+            </p>
           </div>
         </div>
 
         {/* ── BOUTONS ── */}
         <div className="od-actions">
-
-          {/* MODE NORMAL — école */}
-          {role === "ecole" && !editMode && (
+          {role === "admin" && !editMode && (
             <>
-              <button className="od-btn-edit" onClick={() => setEditMode(true)}>
-                ✏️ Modifier l'offre
-              </button>
-              <button className="od-btn-delete" onClick={() => setShowDeleteConfirm(true)}>
-                🗑️ Supprimer
-              </button>
+              <button className="od-btn-edit" onClick={() => setEditMode(true)}>✏️ Modifier l'offre</button>
+              <button className="od-btn-delete" onClick={() => setShowDeleteConfirm(true)}>🗑️ Supprimer</button>
             </>
           )}
-
-          {/* MODE ÉDITION */}
           {editMode && (
             <>
-              <button className="od-btn-save" onClick={handleSave}>
-                💾 Publier les modifications
-              </button>
-              <button className="od-btn-cancel" onClick={() => setEditMode(false)}>
-                Annuler
-              </button>
+              <button className="od-btn-save" onClick={handleSave}>💾 Publier les modifications</button>
+              <button className="od-btn-cancel" onClick={() => setEditMode(false)}>Annuler</button>
             </>
           )}
-
-          {/* ÉTUDIANT */}
-          {role !== "ecole" && (
-            <button
-              className="od-btn-postuler"
-              onClick={() => navigate("/candidatures")}
-            >
+          {role !== "admin" && (
+            <button className="od-btn-postuler" onClick={() => navigate(`/offres/${offre.id}/candidature`)}>
               Postuler maintenant →
             </button>
           )}
-
         </div>
       </div>
 
-      {/* ══════════ CORPS ══════════ */}
+      {/* ── CORPS ── */}
       <div className="od-body">
 
-        {/* ── COLONNE PRINCIPALE ── */}
         <div className="od-main">
 
           <div className="od-section">
@@ -175,71 +220,55 @@ Dans le cadre de gros projets de développement et d'intégration, les applicati
                 rows={12}
               />
             ) : (
-              <p className="od-text">{description}</p>
+              <p className="od-text">{offre.description}</p>
             )}
           </div>
 
-          <div className="od-section">
-            <h2 className="od-section-title">Missions</h2>
-            <ul className="od-list">
-              <li>Développement et Test</li>
-              <li>Conception / Spécifications</li>
-              <li>Mise à jour de la documentation technique</li>
-              <li>Amélioration continue des performances et de la sécurité</li>
-              <li>Implication dans les différentes phases de maintenance (corrective, évolutive)</li>
-            </ul>
-          </div>
-
-          <div className="od-section">
-            <h2 className="od-section-title">Profil recherché</h2>
-            <ul className="od-list">
-              <li>Visual Studio .Net (2.0, 3.5, 4.0), VB.Net, C#</li>
-              <li>Bootstrap</li>
-              <li>Team Foundation Server</li>
-              <li>SGBDR notamment Oracle, SQL Server</li>
-              <li>Systèmes et workflows documentaires</li>
-              <li>Bon niveau d'anglais — espagnol apprécié</li>
-              <li>Force de proposition, travail d'équipe essentiel</li>
-            </ul>
-          </div>
-
-          <div className="od-section">
-            <h2 className="od-section-title">Les avantages</h2>
-            <div className="od-avantages">
-              <div className="od-avantage">🏥 Mutuelle</div>
-              <div className="od-avantage">🍽️ Tickets restaurant</div>
-              <div className="od-avantage">📈 Actionnariat</div>
-              <div className="od-avantage">🎉 CSE dynamique</div>
-              <div className="od-avantage">🚲 Mobilité douce</div>
+          {offre.missions?.length > 0 && (
+            <div className="od-section">
+              <h2 className="od-section-title">Missions</h2>
+              <ul className="od-list">
+                {offre.missions.map((m, i) => <li key={i}>{m}</li>)}
+              </ul>
             </div>
-          </div>
+          )}
 
-          <div className="od-section">
-            <h2 className="od-section-title">Étapes de recrutement</h2>
-            <div className="od-steps">
-              <div className="od-step">
-                <div className="od-step-num">1</div>
-                <div className="od-step-content">
-                  <strong>Préqualification téléphonique</strong>
-                  <p>Une personne de l'équipe recrutement vous contacte si votre CV est retenu.</p>
-                </div>
-              </div>
-              <div className="od-step">
-                <div className="od-step-num">2</div>
-                <div className="od-step-content">
-                  <strong>Entretien avec un pair</strong>
-                  <p>Mettre en perspective vos visions respectives.</p>
-                </div>
-              </div>
-              <div className="od-step">
-                <div className="od-step-num">3</div>
-                <div className="od-step-content">
-                  <strong>Entretien avec votre futur N+1</strong>
-                  <p>Le directeur de la BU — processus de 10 jours maximum.</p>
-                </div>
+          {offre.profilRecherche?.length > 0 && (
+            <div className="od-section">
+              <h2 className="od-section-title">Profil recherché</h2>
+              <ul className="od-list">
+                {offre.profilRecherche.map((p, i) => <li key={i}>{p}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {offre.avantages?.length > 0 && (
+            <div className="od-section">
+              <h2 className="od-section-title">Les avantages</h2>
+              <div className="od-avantages">
+                {offre.avantages.map((a, i) => (
+                  <div key={i} className="od-avantage">{a}</div>
+                ))}
               </div>
             </div>
-          </div>
+          )}
+
+          {offre.etapesRecrutement?.length > 0 && (
+            <div className="od-section">
+              <h2 className="od-section-title">Étapes de recrutement</h2>
+              <div className="od-steps">
+                {offre.etapesRecrutement.map((e, i) => (
+                  <div key={i} className="od-step">
+                    <div className="od-step-num">{i + 1}</div>
+                    <div className="od-step-content">
+                      <strong>{e.titre}</strong>
+                      <p>{e.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
 
@@ -248,39 +277,39 @@ Dans le cadre de gros projets de développement et d'intégration, les applicati
 
           <div className="od-sidebar-card">
             <h3 className="od-sidebar-title">Informations</h3>
-            <div className="od-sinfo"><span>Entreprise</span><strong>Coexya</strong></div>
-            <div className="od-sinfo"><span>Lieu</span><strong>Paris 12e, 75</strong></div>
-            <div className="od-sinfo"><span>Type de contrat</span><strong>Stage</strong></div>
-            <div className="od-sinfo"><span>Salaire</span><strong>15 000 – 17 000 € / an</strong></div>
-            <div className="od-sinfo"><span>Niveau requis</span><strong>Bac +2 à Bac +5</strong></div>
-            <div className="od-sinfo"><span>Secteur</span><strong>Informatique · ESN</strong></div>
-            <div className="od-sinfo"><span>Publiée le</span><strong>09 juin 2026</strong></div>
-          </div>
-
-          <div className="od-sidebar-card">
-            <h3 className="od-sidebar-title">Recruteur</h3>
-            <p className="od-recruiter-text">
-              Ce recruteur garantit une réponse à chaque candidature et répond en moyenne en <strong>15 jours</strong>.
-            </p>
-            <div className="od-recruiter-tags">
-              <span>✅ Réponse garantie</span>
-              <span>💬 Transparent</span>
-              <span>⚡ Réactif</span>
+            <div className="od-sinfo"><span>Entreprise</span><strong>{offre.nomEntreprise}</strong></div>
+            {offre.lieu && <div className="od-sinfo"><span>Lieu</span><strong>{offre.lieu}</strong></div>}
+            <div className="od-sinfo"><span>Type de contrat</span><strong>{offre.typeContrat}</strong></div>
+            {offre.salaire && <div className="od-sinfo"><span>Salaire</span><strong>{offre.salaire}</strong></div>}
+            {offre.niveauEtudes && <div className="od-sinfo"><span>Niveau requis</span><strong>{offre.niveauEtudes}</strong></div>}
+            {offre.secteur && <div className="od-sinfo"><span>Secteur</span><strong>{offre.secteur}</strong></div>}
+            <div className="od-sinfo">
+              <span>Publiée le</span>
+              <strong>{new Date(offre.datePublication).toLocaleDateString("fr-FR")}</strong>
             </div>
           </div>
 
-          {/* ACTIONS SIDEBAR — école uniquement */}
-          {role === "ecole" && !editMode && (
+          {offre.delaiReponse && (
+            <div className="od-sidebar-card">
+              <h3 className="od-sidebar-title">Recruteur</h3>
+              <p className="od-recruiter-text">
+                Ce recruteur répond en moyenne en <strong>{offre.delaiReponse}</strong>.
+              </p>
+              <div className="od-recruiter-tags">
+                {offre.isTransparent && <span>💬 Transparent</span>}
+                {offre.isReactif && <span>⚡ Réactif</span>}
+                {offre.isSuperRecruteur && <span>⭐ Super recruteur</span>}
+              </div>
+            </div>
+          )}
+
+          {role === "admin" && !editMode && (
             <div className="od-sidebar-card od-sidebar-danger">
               <h3 className="od-sidebar-title">Gestion</h3>
               <p className="od-danger-text">Modifier ou retirer cette offre de la plateforme.</p>
               <div className="od-sidebar-btns">
-                <button className="od-sidebar-edit-btn" onClick={() => setEditMode(true)}>
-                  ✏️ Modifier
-                </button>
-                <button className="od-sidebar-delete-btn" onClick={() => setShowDeleteConfirm(true)}>
-                  🗑️ Supprimer l'offre
-                </button>
+                <button className="od-sidebar-edit-btn" onClick={() => setEditMode(true)}>✏️ Modifier</button>
+                <button className="od-sidebar-delete-btn" onClick={() => setShowDeleteConfirm(true)}>🗑️ Supprimer l'offre</button>
               </div>
             </div>
           )}

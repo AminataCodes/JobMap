@@ -1,24 +1,54 @@
+import { useEffect, useState } from "react";
 import "../styles/offres.css";
 import OffreCard from "../components/OffreCard";
 
 function OffresPage() {
-  // Exemple de donnée d'offre (à remplacer par tes données API plus tard)
-  const offre = {
-    id: 1,
-    titre: "Développeur Front-End React",
-    description: "Rejoignez notre équipe pour développer des interfaces modernes et intuitives au sein d'un environnement agile.",
-    entreprise: "TechNova",
-  };
+  const [offres, setOffres] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOffres = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/offres");
+
+        if (!res.ok) {
+          throw new Error("Erreur lors du chargement");
+        }
+
+        const data = await res.json();
+
+        setOffres(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOffres();
+  }, []);
 
   const handleVoirOffre = (offre) => {
-    // Pour l'instant juste un log, plus tard tu pourras naviguer vers /offres/:id
     console.log("Offre cliquée :", offre);
   };
+
+  if (loading) {
+    return <p>Chargement...</p>;
+  }
 
   return (
     <div className="offres-page">
       <h1>Offres disponibles</h1>
-      <OffreCard offre={offre} onVoirOffre={handleVoirOffre} />
+
+      <div className="offres-list">
+        {offres.map((offre) => (
+          <OffreCard
+            key={offre.id}
+            offre={offre}
+            onVoirOffre={handleVoirOffre}
+          />
+        ))}
+      </div>
     </div>
   );
 }
