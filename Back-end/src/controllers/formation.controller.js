@@ -1,22 +1,28 @@
 import prisma from '../lib/prisma.js'
 
-// ── POST /api/auth/ecole/formations ──
+// ── POST /api/auth/admin/formations ──
+// NOTE : le modèle Formation n'existe pas encore dans le schema.
+// Cette route renvoie 501 jusqu'à ce que tu l'ajoutes.
 export const ajouterFormation = async (req, res) => {
   try {
     const { nom } = req.body
-
-    if (!nom || !nom.trim()) {
+    if (!nom?.trim()) {
       return res.status(400).json({ message: 'Le nom est requis' })
     }
 
-    const formation = await prisma.formation.create({
-      data: {
-        nom:     nom.trim(),
-        ecoleId: req.user.id,
-      },
+
+    // TODO : ajouter le modèle Formation dans schema.prisma
+    // model Formation {
+    //   id      String @id @default(uuid())
+    //   nom     String
+    //   adminId String
+    //   admin   Admin  @relation(fields: [adminId], references: [uid])
+    // }
+    // Puis relancer : npx prisma migrate dev --name add_formation
+    return res.status(501).json({
+      message: 'Fonctionnalité Formation pas encore migrée en base'
     })
 
-    return res.status(201).json(formation)
 
   } catch (err) {
     console.error('ajouterFormation:', err)
@@ -24,23 +30,13 @@ export const ajouterFormation = async (req, res) => {
   }
 }
 
-// ── DELETE /api/auth/ecole/formations/:id ──
+// ── DELETE /api/auth/admin/formations/:id ──
 export const supprimerFormation = async (req, res) => {
   try {
-    const { id } = req.params
 
-    const formation = await prisma.formation.findUnique({ where: { id } })
-
-    if (!formation) {
-      return res.status(404).json({ message: 'Formation introuvable' })
-    }
-
-    if (formation.ecoleId !== req.user.id) {
-      return res.status(403).json({ message: 'Non autorisé' })
-    }
-
-    await prisma.formation.delete({ where: { id } })
-    return res.json({ message: 'Formation supprimée' })
+    return res.status(501).json({
+      message: 'Fonctionnalité Formation pas encore migrée en base'
+    })
 
   } catch (err) {
     console.error('supprimerFormation:', err)

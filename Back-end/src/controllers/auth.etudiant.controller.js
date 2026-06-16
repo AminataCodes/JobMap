@@ -145,8 +145,10 @@ export const getProfil = async (req, res) => {
                 prenom: true,
                 niveauEtude: true,
                 cvUrl: true,
-                bio: true,           // ← AJOUT
-                competences: true,   // ← AJOUT
+                bio: true,
+                competences: true,
+                experiences: true,
+                photoProfilUrl: true,
             },
         })
 
@@ -160,23 +162,41 @@ export const getProfil = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
 // ─── UPDATE PROFIL ───────────────────────────────────────────
 export const updateProfil = async (req, res) => {
     try {
-        const { nom, prenom, niveauEtude, bio, competences } = req.body
+        const { nom, prenom, niveauEtude, bio, competences, experiences } = req.body
+
+        const cvFile = req.files?.cv?.[0]
+        const photoFile = req.files?.photoProfil?.[0]
 
         let cvUrl = undefined
-        if (req.file) {
-            cvUrl = await uploadFile(req.file, 'cv')
+        if (cvFile) {
+            cvUrl = await uploadFile(cvFile, 'cv')
         }
 
-        // competences arrive en JSON string depuis FormData
+        let photoProfilUrl = undefined
+        if (photoFile) {
+            photoProfilUrl = await uploadFile(photoFile, 'photos')
+        }
+
+        // competences et experiences arrivent en JSON string depuis FormData
         let competencesArray = undefined
         if (competences) {
             try {
                 competencesArray = JSON.parse(competences)
             } catch {
                 competencesArray = undefined
+            }
+        }
+
+        let experiencesArray = undefined
+        if (experiences) {
+            try {
+                experiencesArray = JSON.parse(experiences)
+            } catch {
+                experiencesArray = undefined
             }
         }
 
@@ -187,8 +207,10 @@ export const updateProfil = async (req, res) => {
                 ...(prenom && { prenom }),
                 ...(niveauEtude && { niveauEtude }),
                 ...(cvUrl && { cvUrl }),
+                ...(photoProfilUrl && { photoProfilUrl }),
                 ...(bio !== undefined && { bio }),
                 ...(competencesArray && { competences: competencesArray }),
+                ...(experiencesArray && { experiences: experiencesArray }),
             },
             select: {
                 uid: true,
@@ -199,6 +221,8 @@ export const updateProfil = async (req, res) => {
                 cvUrl: true,
                 bio: true,
                 competences: true,
+                experiences: true,
+                photoProfilUrl: true,
             },
         })
 
