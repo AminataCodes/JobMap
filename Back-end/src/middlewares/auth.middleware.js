@@ -26,7 +26,7 @@ export const isEtudiant = (req, res, next) => {
 }
 
 export const isEcole = (req, res, next) => {
-  if (req.user?.role !== 'ecole') {
+  if (req.user?.role !== 'admin') {
     return res.status(403).json({ message: 'Accès réservé aux écoles' })
   }
   next()

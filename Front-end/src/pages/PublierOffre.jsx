@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { createOffre } from "../services/offre.service"
+import { useNavigate } from "react-router-dom"
 
 export default function PublierOffre() {
+    const navigate = useNavigate()
 
     const [format, setFormat] = useState("")
 
@@ -32,28 +33,10 @@ export default function PublierOffre() {
         e.preventDefault()
 
         try {
-            const token = localStorage.getItem("token")
-            let payload
+            setMessage("Extraction en cours... ⏳")
 
-            if (format === "pdf") {
-                payload = new FormData()
-                payload.append("pdf", pdfFile)
-                payload.append("format", "pdf")
-
-            } else if (format === "lien") {
-                payload = {
-                    format: "lien",
-                    lienPostulation: formData.lienPostulation
-                }
-
-            } else {
-                payload = {
-                    format: "texte",
-                    ...formData
-                }
-            }
-
-            await createOffre(payload, token)
+            // ⏳ simulation backend (2 secondes)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
 
             setMessage("Offre publiée avec succès ✅")
 
@@ -70,6 +53,9 @@ export default function PublierOffre() {
                 lienPostulation: ""
             })
 
+            // 🚀 navigation après 2 sec
+            navigate("/offre-preview")
+
         } catch (error) {
             console.error(error)
             setMessage("Erreur lors de la publication ❌")
@@ -79,7 +65,7 @@ export default function PublierOffre() {
     return (
         <div className="candidature">
 
-            <h1>Publier une offre</h1>
+            <h1 onClick={() => navigate("/offre-preview")}>Publier une offre</h1>
 
             <form onSubmit={handleSubmit}>
 
@@ -192,7 +178,7 @@ export default function PublierOffre() {
                 )}
 
                 {format && (
-                    <button type="submit">Publier</button>
+                    <button type="submit">Extraire l'offre</button>
                 )}
 
                 {message && <p>{message}</p>}

@@ -7,6 +7,7 @@ import extractionRoutes from './src/routes/extraction.routes.js'
 
 
 import offreRoutes from './src/routes/offre.routes.js'
+import etudiantRoutes from './src/routes/etudiant.routes.js'
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use('/api/candidatures', candidatureRoutes)
 app.use('/api/auth/admin', authAdminRoutes)
 app.use('/api/offres', offreRoutes)
 app.use("/api/extraction", extractionRoutes);
+app.use('/api/etudiants', etudiantRoutes)
 
 app.use((err, req, res, next) => {
   if (err.name === 'MulterError' || err.message?.includes('CV') || err.message?.includes('logo')) {

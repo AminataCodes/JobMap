@@ -1,0 +1,306 @@
+/* ===== PAGE ===== */
+
+.etudiants-page {
+  min-height: 100vh;
+  background: #f4f8ff;
+  padding: 40px;
+  font-family: 'Inter', sans-serif;
+}
+
+.etudiants-page h1 {
+  color: #12376b;
+  margin-bottom: 25px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* ===== SEARCH ===== */
+
+.etudiants-search {
+  width: 100%;
+  max-width: 500px;
+  padding: 14px 18px;
+  border: 1px solid #d8e6ff;
+  border-radius: 14px;
+  background: white;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+  margin-bottom: 30px;
+}
+
+.etudiants-search:focus {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.15);
+}
+
+/* ===== LAYOUT ===== */
+
+.etudiants-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 25px;
+}
+
+/* ===== LISTE ===== */
+
+.etudiants-list {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(20, 70, 140, 0.08);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.etudiant-card {
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8fbff;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 2px solid transparent;
+}
+
+.etudiant-card:hover {
+  transform: translateY(-2px);
+  background: #eef5ff;
+}
+
+.etudiant-card.active {
+  border-color: #4f8cff;
+  background: #eef5ff;
+}
+
+.etudiant-card h3 {
+  color: #12376b;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.etudiant-card p {
+  color: #6b7b95;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.candidatures-count {
+  background: #dceaff;
+  color: #2563eb;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== DETAIL ===== */
+
+.etudiant-detail {
+  background: white;
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow: 0 8px 25px rgba(20, 70, 140, 0.08);
+}
+
+/* ===== HEADER ===== */
+
+.etudiant-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #e7efff;
+  padding-bottom: 20px;
+}
+
+.etudiant-detail-header h2 {
+  color: #12376b;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.etudiant-niveau-badge {
+  background: linear-gradient(135deg, #4f8cff, #72b3ff);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.etudiant-email {
+  color: #5f728d;
+  margin-bottom: 25px;
+  font-size: 15px;
+}
+
+/* ===== BIO ===== */
+
+.etudiant-bio {
+  background: #f8fbff;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+}
+
+.etudiant-bio h4 {
+  color: #12376b;
+  margin-bottom: 10px;
+}
+
+.etudiant-bio p {
+  color: #55657e;
+  line-height: 1.7;
+}
+
+/* ===== COMPETENCES ===== */
+
+.etudiant-competences {
+  margin-bottom: 30px;
+}
+
+.etudiant-competences h4 {
+  color: #12376b;
+  margin-bottom: 15px;
+}
+
+.competences-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.competence-tag {
+  background: linear-gradient(
+    135deg,
+    #e7f1ff,
+    #d6e8ff
+  );
+  color: #2563eb;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.competence-tag:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== CV ===== */
+
+.cv-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(
+    135deg,
+    #4f8cff,
+    #72b3ff
+  );
+  color: white;
+  text-decoration: none;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 600;
+  margin-bottom: 35px;
+  transition: 0.3s;
+}
+
+.cv-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 140, 255, 0.3);
+}
+
+/* ===== CANDIDATURES ===== */
+
+.etudiant-candidatures h4 {
+  color: #12376b;
+  margin-bottom: 20px;
+}
+
+.candidature-item {
+  background: #f8fbff;
+  border-left: 5px solid #4f8cff;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 18px;
+}
+
+.candidature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.candidature-header strong {
+  color: #12376b;
+  font-size: 16px;
+}
+
+.candidature-header span {
+  color: #4f8cff;
+  font-weight: 600;
+}
+
+.candidature-lieu {
+  color: #6b7b95;
+  margin-bottom: 10px;
+}
+
+.candidature-message {
+  color: #55657e;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.lettre-link {
+  display: inline-block;
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 600;
+  margin-right: 15px;
+}
+
+.candidature-date {
+  color: #94a3b8;
+  font-size: 13px;
+  display: block;
+  margin-top: 10px;
+}
+
+/* ===== ETATS ===== */
+
+.empty-text,
+.no-result {
+  color: #94a3b8;
+  text-align: center;
+  padding: 20px;
+}
+
+.etudiants-loading,
+.etudiants-error {
+  text-align: center;
+  font-size: 18px;
+  padding: 40px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 1000px) {
+  .etudiants-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .etudiants-list {
+    max-height: unset;
+  }
+
+  .etudiant-detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}

@@ -6,16 +6,17 @@ export const createCandidature = async (data) => {
   });
 };
 
-export const getAllCandidatures = async (userId) => {
-  return await prisma.candidature.findMany({
-    where: {
-      etudiantId: userId,
+export const getAllCandidatures = async (etudiantId) => {
+  return prisma.candidature.findMany({
+    where: { etudiantId },
+    include: {
+      offre: true
     },
     orderBy: {
-      dateDepot: "desc",
-    },
-  });
-};
+      createdAt: "desc"
+    }
+  })
+}
 
 export const getCandidatureById = async (id, userId) => {
   return await prisma.candidature.findUnique({

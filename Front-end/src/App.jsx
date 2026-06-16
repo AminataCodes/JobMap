@@ -17,10 +17,12 @@ import OffresPage from "./pages/OffresPage"
 import PublierOffre from "./pages/PublierOffre"
 import OffreDetailPage from "./pages/OffreDetailPage"
 import OffrePreviewPage from "./pages/OffrePreviewPage"
+import ProfilEtudiantsPage from './pages/ProfilEtudiantsPage'
 
 import {
   Candidature,
-  Candidatures
+  Candidatures,
+  MesCandidatures
 } from "./pages/CandidatureBundle"
 
 import "./App.css"
@@ -42,7 +44,6 @@ function App() {
 
               {/* OFFRE DÉTAIL */}
               <Route path="/offres/:id" element={<OffreDetailPage />} />
-              <Route path="/offre" element={<OffreDetailPage />} />
 
               {/* ÉTUDIANT */}
               <Route
@@ -62,15 +63,15 @@ function App() {
                 }
               />
               <Route
-                path="/candidatures-suivi"
+                path="/mes-candidatures"
                 element={
                   <ProtectedRoute allowedRoles={["etudiant"]}>
-                    <Candidatures />
+                    <MesCandidatures />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/annonce/:id/candidature"
+                path="/offres/:id/candidature"
                 element={
                   <ProtectedRoute allowedRoles={["etudiant"]}>
                     <Candidature />
@@ -137,7 +138,15 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/offre-preview" element={<OffrePreviewPage />} />
+              <Route
+                path="/offre-preview"
+                element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <OffrePreviewPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/etudiants" element={<ProfilEtudiantsPage />} />
 
             </Routes>
           </main>

@@ -1,53 +1,108 @@
 .offres-page {
-  max-width: 600px;
+  max-width: 800px;
   margin: 40px auto;
   padding: 0 20px;
 }
 
 .offres-page h1 {
   margin-bottom: 24px;
-  font-size: 24px;
-  color: #1E293B;
+  font-size: 32px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.offres-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .offre-card {
   background: white;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 20px;
+  padding: 28px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 20px;
 }
 
+.offre-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6D6AFE, #8B7CF6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.offre-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.offre-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.tag {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tag-stage { background: #F3E8FF; color: #8B5CF6; }
+.tag-recruteur { background: #FEF3C7; color: #B45309; }
+.tag-reactif { background: #DCFCE7; color: #16A34A; }
+.tag-transparent { background: #E0F2FE; color: #0284C7; }
+
 .offre-titre {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1E293B;
-  margin-bottom: 8px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 4px;
+}
+
+.offre-entreprise {
+  font-size: 15px;
+  font-weight: 700;
+  color: #6366F1;
+  margin-bottom: 10px;
 }
 
 .offre-description {
   font-size: 14px;
   color: #64748B;
-  margin-bottom: 12px;
-  line-height: 1.5;
+  margin-bottom: 16px;
+  line-height: 1.6;
 }
 
-.offre-entreprise {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2563EB;
-}
 .offre-btn {
-  margin-top: 0.75rem;
-  padding: 0.5rem 1rem;
-  background-color: #2563eb;
+  background: #6366F1;
   color: white;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 24px;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 500;
+  transition: background 0.2s;
 }
 
 .offre-btn:hover {
-  background-color: #1d4ed8;
+  background: #4F46E5;
+}
+
+@media (max-width: 600px) {
+  .offre-card {
+    flex-direction: column;
+  }
 }

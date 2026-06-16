@@ -262,10 +262,18 @@
 
 .bundle-card {
   background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-  padding: 28px;
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.bundle-card h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E2E8F0;
+  margin-bottom: 16px;
 }
 
 .bundle-form {
@@ -276,51 +284,66 @@
 
 .bundle-form input,
 .bundle-form textarea {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
   padding: 12px 14px;
-  border-radius: 12px;
-  color: #0f172a;
+  border-radius: 10px;
+  color: #0F172A;
+  font-size: 14px;
   outline: none;
   transition: 0.2s;
 }
 
+.bundle-form input::placeholder,
+.bundle-form textarea::placeholder {
+  color: #94A3B8;
+}
+
 .bundle-form input:focus,
 .bundle-form textarea:focus {
-  border-color: #6366f1;
+  border-color: #6366F1;
   background: white;
 }
 
 .bundle-upload {
-  border: 1px dashed #6366f1;
+  border: 1px dashed #6366F1;
   padding: 18px;
   text-align: center;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
-  color: #6366f1;
-  background: #eef2ff;
-}
-
-.btn-submit {
-  background: linear-gradient(135deg, #6366f1, #60a5fa);
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  color: white;
+  color: #6366F1;
   font-weight: 600;
-  cursor: pointer;
+  font-size: 14px;
+  background: #EEF2FF;
   transition: 0.2s;
 }
 
+.bundle-upload:hover {
+  background: #E0E7FF;
+}
+
+.btn-submit {
+  background: #6366F1;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
 .btn-submit:hover {
-  transform: translateY(-2px);
+  background: #4F46E5;
 }
 
 .toast-success {
   margin-top: 12px;
-  color: #16a34a;
+  color: #16A34A;
   font-size: 13px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
+  font-weight: 500;
 }

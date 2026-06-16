@@ -4,6 +4,11 @@ function getToken() {
   return localStorage.getItem('token')
 }
 
+const authHeaders = () => {
+  const token = getToken()
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
 // ──────────────────────────────────────────────
 //  AUTH ÉTUDIANT
 // ──────────────────────────────────────────────
@@ -34,9 +39,7 @@ export function registerEtudiant(data) {
 
 export function getProfilEtudiant() {
   return fetch(`${BASE}/auth/etudiant/profil`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: { Authorization: `Bearer ${getToken()}` },
   }).then(async (res) => {
     const data = await res.json()
     if (!res.ok) throw new Error(data.message || 'Erreur serveur')
@@ -47,9 +50,7 @@ export function getProfilEtudiant() {
 export function updateProfilEtudiant(formData) {
   return fetch(`${BASE}/auth/etudiant/profil`, {
     method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: { Authorization: `Bearer ${getToken()}` },
     body: formData,
   }).then(async (res) => {
     const data = await res.json()
@@ -64,9 +65,7 @@ export function updateProfilEtudiant(formData) {
 
 export function getMesRendezVous() {
   return fetch(`${BASE}/rendezvous/mes-rdv`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: { Authorization: `Bearer ${getToken()}` },
   }).then(async (res) => {
     const data = await res.json()
     if (!res.ok) throw new Error(data.message || 'Erreur serveur')
@@ -111,7 +110,15 @@ export const registerAdmin = async (data) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
-  return res.json()
+
+  const json = await res.json()                          // ✅ fix
+
+
+  if (!res.ok) throw new Error(json.message || 'Erreur serveur')  // ✅ fix
+
+
+  return json                                            // ✅ fix
+
 }
 
 export const loginAdmin = async (data) => {
@@ -120,14 +127,24 @@ export const loginAdmin = async (data) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
-  return res.json()
+
+  const json = await res.json()                          // ✅ fix
+
+
+  if (!res.ok) throw new Error(json.message || 'Erreur serveur')  // ✅ fix
+
+
+  return json                                            // ✅ fix
+
 }
 
 export const getProfilAdmin = async (token) => {
   const res = await fetch(`${BASE}/auth/admin/profil`, {
     headers: { Authorization: `Bearer ${token}` },
   })
-  return res.json()
+  const json = await res.json()
+  if (!res.ok) throw new Error(json.message || 'Erreur serveur')
+  return json
 }
 
 export const ajouterFormation = async (token, nom) => {
@@ -139,7 +156,9 @@ export const ajouterFormation = async (token, nom) => {
     },
     body: JSON.stringify({ nom }),
   })
-  return res.json()
+  const json = await res.json()
+  if (!res.ok) throw new Error(json.message || 'Erreur serveur')
+  return json
 }
 
 export const supprimerFormation = async (token, id) => {
@@ -147,11 +166,13 @@ export const supprimerFormation = async (token, id) => {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   })
-  return res.json()
+  const json = await res.json()
+  if (!res.ok) throw new Error(json.message || 'Erreur serveur')
+  return json
 }
 
 export const ajouterOffre = async (token, titre, description) => {
-  const res = await fetch(`${BASE}/auth/admin/offres`, {
+  const res = await res.fetch(`${BASE}/auth/admin/offres`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -159,7 +180,9 @@ export const ajouterOffre = async (token, titre, description) => {
     },
     body: JSON.stringify({ titre, description }),
   })
-  return res.json()
+  const json = await res.json()
+  if (!res.ok) throw new Error(json.message || 'Erreur serveur')
+  return json
 }
 
 export const supprimerOffre = async (token, id) => {
@@ -167,7 +190,9 @@ export const supprimerOffre = async (token, id) => {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   })
-  return res.json()
+  const json = await res.json()
+  if (!res.ok) throw new Error(json.message || 'Erreur serveur')
+  return json
 }
 
 // ──────────────────────────────────────────────
@@ -203,4 +228,24 @@ export function modifierOffreApi(token, id, titre, description) {
     if (!res.ok) throw new Error(data.message || 'Erreur serveur')
     return data
   })
+}
+
+// ──────────────────────────────────────────────
+//  ÉTUDIANTS (CÔTÉ ÉCOLE)
+// ──────────────────────────────────────────────
+
+export const getAllEtudiants = async () => {
+  const res = await fetch(`${BASE}/etudiants`, {
+    headers: authHeaders(),
+  })
+  if (!res.ok) throw new Error('Erreur lors de la récupération des étudiants')
+  return res.json()
+}
+
+export const getEtudiantById = async (id) => {
+  const res = await fetch(`${BASE}/etudiants/${id}`, {
+    headers: authHeaders(),
+  })
+  if (!res.ok) throw new Error("Erreur lors de la récupération de l'étudiant")
+  return res.json()
 }
