@@ -18,6 +18,7 @@ import PublierOffre from "./pages/PublierOffre"
 import OffreDetailPage from "./pages/OffreDetailPage"
 
 import OffrePreviewPage from "./pages/OffrePreviewPage";
+import ProfilEtudiantsPage from './pages/ProfilEtudiantsPage'
 
 import {
   Candidature,
@@ -141,6 +142,7 @@ function App() {
               <Route path="/offres" element={<OffresPage />} />
               <Route path="/publier-offre" element={<PublierOffre />} />
               <Route path="/offre-preview" element={<OffrePreviewPage />} />
+              <Route path="/etudiants" element={<ProfilEtudiantsPage />} />
             </Routes>
           </main>
 
