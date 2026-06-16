@@ -17,6 +17,8 @@ model Etudiant {
   cvUrl          String?
   bio            String?
   competences    String[]
+  experiences    Json?          @default("[]")
+  photoProfilUrl String?
 
   emailVerified  Boolean        @default(false)
   verifyToken    String?
