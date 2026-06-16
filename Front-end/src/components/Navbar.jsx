@@ -64,10 +64,15 @@ function Navbar() {
           <>
             <Link to="/mes-candidatures" className={isActive("/mes-candidatures")}>Mes candidatures</Link>
             <Link to="/messagerie" className={isActive("/messagerie")}>Messagerie</Link>
+            <Link to="/offres" className={isActive("/offres")}>Offres</Link>
           </>
         )}
         {isAdmin && (
-          <Link to="/etudiants" className={isActive("/etudiants")}>Étudiants</Link>
+          <>
+            <Link to="/etudiants" className={isActive("/etudiants")}>Étudiants</Link>
+            <Link to="/publier-offre" className={isActive("/publier-offre")}>+Publier</Link>
+            <Link to="/offres" className={isActive("/offres")}>Offres</Link>
+          </>
         )}
       </div>
 

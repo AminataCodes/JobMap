@@ -1,6 +1,8 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function PublierOffre() {
+    const navigate = useNavigate()
 
     const [format, setFormat] = useState("") // "pdf" | "lien" | "texte"
 
@@ -28,65 +30,43 @@ export default function PublierOffre() {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+    e.preventDefault()
 
-        try {
-            const token = localStorage.getItem("token")
-            let payload
+    try {
+        setMessage("Extraction en cours... ⏳")
 
-            if (format === "pdf") {
-                // On envoie un FormData pour pouvoir envoyer le fichier
-                payload = new FormData()
-                payload.append("pdf", pdfFile)
-                payload.append("format", "pdf")
+        // ⏳ simulation backend (2 secondes)
+        await new Promise((resolve) => setTimeout(resolve, 2000))
 
-            } else if (format === "lien") {
-                payload = {
-                    format: "lien",
-                    lienPostulation: formData.lienPostulation
-                }
+        setMessage("Offre publiée avec succès ✅")
 
-            } else {
-                payload = {
-                    format: "texte",
-                    ...formData
-                }
-            }
+        // Reset
+        setFormat("")
+        setPdfFile(null)
+        setFormData({
+            nomEntreprise: "",
+            nomPoste: "",
+            description: "",
+            lieu: "",
+            competencesObligatoires: "",
+            competencesSouhaitables: "",
+            dateDeDebut: "",
+            lienPostulation: ""
+        })
 
+        // 🚀 navigation après 2 sec
+        navigate("/offre-preview")
 
-
-            const data = await response.json()
-
-            if (!response.ok) {
-                throw new Error(data.message || "Erreur lors de la publication")
-            }
-
-            setMessage("Offre publiée avec succès ✅")
-
-            // Reset
-            setFormat("")
-            setPdfFile(null)
-            setFormData({
-                nomEntreprise: "",
-                nomPoste: "",
-                description: "",
-                lieu: "",
-                competencesObligatoires: "",
-                competencesSouhaitables: "",
-                dateDeDebut: "",
-                lienPostulation: ""
-            })
-
-        } catch (error) {
-            console.error(error)
-            setMessage("Erreur lors de la publication ❌")
-        }
+    } catch (error) {
+        console.error(error)
+        setMessage("Erreur lors de la publication ❌")
     }
+}
 
     return (
         <div className="candidature">
 
-            <h1>Publier une offre</h1>
+            <h1 onClick={() => navigate("/offre-preview")}>Publier une offre</h1>
 
             <form onSubmit={handleSubmit}>
 
@@ -203,7 +183,7 @@ export default function PublierOffre() {
 
                 {/* Bouton visible seulement si un format est choisi */}
                 {format && (
-                    <button type="submit">Publier</button>
+                    <button type="submit">Extraire l'offre</button>
                 )}
 
                 {message && <p>{message}</p>}
