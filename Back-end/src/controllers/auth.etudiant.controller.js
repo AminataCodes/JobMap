@@ -146,9 +146,7 @@ export const getProfil = async (req, res) => {
                 niveauEtude: true,
                 cvUrl: true,
                 bio: true,
-                competences: true,
-                experiences: true,
-                photoProfilUrl: true,
+                competences: true
             },
         })
 
