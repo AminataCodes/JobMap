@@ -1,4 +1,3 @@
-cat > src/App.jsx << 'EOF'
 import { Routes, Route } from "react-router-dom"
 
 import { ThemeProvider } from "./context/ThemeContext"
@@ -133,7 +132,7 @@ function App() {
               <Route
                 path="/offres"
                 element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
+                  <ProtectedRoute allowedRoles={["admin", "etudiant"]}>
                     <OffresPage />
                   </ProtectedRoute>
                 }
@@ -149,4 +148,3 @@ function App() {
 }
 
 export default App
-EOF

@@ -62,10 +62,11 @@ function Navbar() {
         <Link to="/" className={isActive("/")}>Accueil</Link>
         {isEtudiant && (
           <>
-            <Link to="/candidatures" className={isActive("/candidatures")}>Mes candidatures</Link>
-            <Link to="/messagerie" className={isActive("/messagerie")}>Messagerie</Link>
+             <Link to="/offres" className={isActive("/offres")}>Offres</Link>
+             <Link to="/messagerie" className={isActive("/messagerie")}>Messagerie</Link>
           </>
-        )}
+    )}
+        
         {isAdmin && (
           <>
             <Link to="/publier-offre" className={isActive("/publier-offre")}>Publier</Link>
@@ -129,7 +130,6 @@ function Navbar() {
             )}
           </div>
         )}
-
       </div>
     </nav>
   );
