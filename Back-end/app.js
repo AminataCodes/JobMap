@@ -13,6 +13,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.get('/test', (req, res) => res.json({ ok: true }))
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/api/auth/etudiant', authEtudiantRoutes)
