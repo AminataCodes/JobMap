@@ -6,11 +6,15 @@
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   display: flex;
-  align-items: center;
+  align-items: center;        /* ← vérifie que c'est bien là */
   justify-content: space-between;
   padding: 0 40px;
   z-index: 1000;
   box-sizing: border-box;
+}
+
+.app-navbar > * {
+  align-self: center;
 }
 
 /* LOGO */
@@ -104,6 +108,7 @@
   transition: background-color 0.15s, color 0.15s;
   position: relative;
   padding: 0;
+  vertical-align: middle; /* ← fix clé */
 }
 
 .nav-icon-btn:hover {
@@ -137,6 +142,21 @@
   border-radius: 50px;
   cursor: pointer;
   transition: background-color 0.15s;
+  height: 36px; /* même hauteur que les boutons */
+  box-sizing: border-box;
+}
+
+.nav-avatar {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  line-height: 1; /* ← empêche l'avatar de gonfler la ligne */
 }
 
 .nav-profile-pill:hover {

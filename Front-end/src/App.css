@@ -435,3 +435,7 @@ button:hover {
   font-size: 13px;
   color: #7b8794;
 }
+
+.nav-icon-btn {
+  margin-top: 0 !important;
+}
