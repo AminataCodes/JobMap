@@ -1,4 +1,4 @@
-const BASE = '/api'
+export const BASE = `${import.meta.env.VITE_API_URL}/api`
 
 function getToken() {
   return localStorage.getItem('token')
@@ -172,7 +172,7 @@ export const supprimerFormation = async (token, id) => {
 }
 
 export const ajouterOffre = async (token, titre, description) => {
-  const res = await res.fetch(`${BASE}/auth/admin/offres`, {
+  const res = await fetch(`${BASE}/auth/admin/offres`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

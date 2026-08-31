@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/OffreDetail.css";
+import {BASE} from "../services/api.js";
 
 function OffreDetailPage() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function OffreDetailPage() {
 
   // ── Fetch de l'offre ──
   useEffect(() => {
-    fetch(`http://localhost:3000/api/offres/${id}`)
+    fetch(`${BASE}/offres/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Offre introuvable");
         return res.json();
@@ -43,7 +44,7 @@ function OffreDetailPage() {
   // ── Sauvegarde ──
   const handleSave = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/offres/${id}`, {
+      const res = await fetch(`${BASE}/offres/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +67,7 @@ function OffreDetailPage() {
   // ── Suppression ──
   const handleDelete = async () => {
     try {
-      await fetch(`http://localhost:3000/api/offres/${id}`, {
+      await fetch(`${BASE}/offres/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

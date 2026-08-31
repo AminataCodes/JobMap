@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/offres.css";
 import OffreCard from "../components/OffreCard";
+import {BASE} from "../services/api.js";
 
 function OffresPage() {
   const [offres, setOffres] = useState([]);
@@ -9,7 +10,7 @@ function OffresPage() {
   useEffect(() => {
     const fetchOffres = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/offres");
+        const res = await fetch(`${BASE}/offres`);
 
         if (!res.ok) {
           throw new Error("Erreur lors du chargement");

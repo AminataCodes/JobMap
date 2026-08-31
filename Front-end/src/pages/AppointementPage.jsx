@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FiCalendar, FiClock, FiVideo, FiMapPin, FiArrowLeft, FiCheckCircle } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Appointement.css';
+import {BASE} from "../services/api.js";
 
 const CRENEAUX_DISPOS = [
   { id: 1, heure: '09:00', dispo: true },
@@ -54,7 +55,7 @@ function AppointmentPage() {
       const token = localStorage.getItem('token');
 
       // ✅ On passe par le proxy Vite /api (plus de localhost:3000)
-      const response = await fetch('/api/rendezvous/proposer', {
+      const response = await fetch(`${BASE}/rendezvous/proposer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
